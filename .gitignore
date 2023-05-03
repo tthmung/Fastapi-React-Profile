@@ -1,5 +1,5 @@
 # Pythopn virtual envionrment
 venv/*
 
-
-.env
+#python cache
+backend/__pycache__/*
