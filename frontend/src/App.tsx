@@ -12,7 +12,7 @@ function App() {
 
     const fetchData = async () => {
       let respose = await api.test();
-      console.log(respose.data.message);
+      console.log(respose.data);
       setBack(respose.data.message);
     }
 

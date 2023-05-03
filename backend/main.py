@@ -1,5 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from dotenv import dotenv_values
+
+env = dotenv_values(".env")
+
+client = MongoClient(env["URI"], server_api=ServerApi('1'))
+experience_collection = client["FARM_Profile"]["Experiences"]
+project_collection = client["FARM_Profile"]["Projects"]
 
 app = FastAPI()
 
@@ -18,7 +27,12 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    try:
+        client.admin.command('ping')
+        return {"message": "Pinged your deployment. You successfully connected to MongoDB!"}
+    except Exception as e:
+        return {"message": e}
+
 
 
 @app.get("/experience")
@@ -49,10 +63,3 @@ async def updateExperience():
 @app.put("/update/project")
 async def updateProject():
     return
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    # For development only
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="debug")

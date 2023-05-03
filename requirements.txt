@@ -1,2 +1,6 @@
 fastapi[all]
 uvicorn[standard]
+pymongo
+pydantic
+typing
+python-dotenv
