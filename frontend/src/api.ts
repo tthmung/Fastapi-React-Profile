@@ -5,7 +5,7 @@ class API {
     apiUrl: string;
 
     constructor() {
-        this.apiUrl = "http://localhost.api:8000";
+        this.apiUrl = "http://localhost:8000";
 
         // Create axios client, pre-configured with baseURL
         this.client = axios.create({
@@ -17,6 +17,11 @@ class API {
         });
     }
 
+
+    test = async () => {
+        let response = await this.client.get("/");
+        return response;
+    }
 }
 
 export default API;
