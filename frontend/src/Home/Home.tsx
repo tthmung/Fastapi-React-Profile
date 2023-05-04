@@ -12,14 +12,13 @@ export default function Home() {
         const api = new API();
 
         const fetchData = async () => {
-            let respose = await api.test();
-            console.log(respose.data);
-            setBack(respose.data.message);
+            let response = await api.test();
+            setBack(response.data.message);
         }
 
 
         fetchData();
-
+        console.log(back);
     }, [])
 
     return (

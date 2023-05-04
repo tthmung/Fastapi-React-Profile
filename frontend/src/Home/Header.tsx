@@ -15,6 +15,7 @@ import {
     HStack,
     useColorMode,
     Center,
+    Text
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
@@ -58,30 +59,27 @@ export default function Header() {
                                 src={"https://api.dicebear.com/6.x/avataaars/svg?seed=Sasha&accessories=sunglasses&eyebrows=default,defaultNatural,flatNatural,raisedExcited,raisedExcitedNatural&eyes=default,happy&facialHair[]&facialHairProbability=0&hairColor=2c1b18,4a312c&mouth=smile&skinColor=f8d25c,fd9841&top=dreads02,shortFlat,hat"}
                             />
                         </Link>
-                        <HStack as={'nav'}
-                            marginLeft={2}
-                            spacing={1}
-                            display={{ base: 'flex' }}>
-                            {Links.map((link) => (
-                                <NavLink key={link.name} linkIndex={link.href}>{link.name}</NavLink>
-                            ))}
-                        </HStack>
                     </Flex>
                     <Flex alignItems={"center"}>
-                        <Stack direction={"row"} spacing={4}>
-                            <Button onClick={toggleColorMode}>
-                                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                            </Button>
-
+                        <Stack direction={"row"} spacing={{ base: '1', md: '4'}}>
+                            <HStack as={'nav'}
+                                spacing={1}
+                                m={0}
+                                display={{ base: 'flex' }}>
+                                {Links.map((link) => (
+                                    <NavLink key={link.name} linkIndex={link.href}>
+                                        {link.name}
+                                    </NavLink>
+                                ))}
+                            </HStack>
                             <Menu>
                                 <MenuButton
                                     as={Button}
-                                    rounded={"full"}
-                                    variant={"link"}
-                                    cursor={"pointer"}
-                                    minW={0}
+                                    variant={'solid'}
+                                    colorScheme={'teal'}
+                                    m={0}
                                 >
-                                    <Box>Connect</Box>
+                                    Connect
                                 </MenuButton>
                                 <MenuList alignItems={"center"}>
                                     <br />
@@ -101,6 +99,10 @@ export default function Header() {
                                     ))}
                                 </MenuList>
                             </Menu>
+                            <Button onClick={toggleColorMode}>
+                                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                            </Button>
+
                         </Stack>
                     </Flex>
                 </Flex>
