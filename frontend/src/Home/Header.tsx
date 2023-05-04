@@ -55,13 +55,13 @@ export default function Header() {
                         <Link
                             href="/">
                             <Avatar
-                                size={"sm"}
+                                size={"md"}
                                 src={"https://api.dicebear.com/6.x/avataaars/svg?seed=Sasha&accessories=sunglasses&eyebrows=default,defaultNatural,flatNatural,raisedExcited,raisedExcitedNatural&eyes=default,happy&facialHair[]&facialHairProbability=0&hairColor=2c1b18,4a312c&mouth=smile&skinColor=f8d25c,fd9841&top=dreads02,shortFlat,hat"}
                             />
                         </Link>
                     </Flex>
                     <Flex alignItems={"center"}>
-                        <Stack direction={"row"} spacing={{ base: '1', md: '4'}}>
+                        <Stack direction={"row"} spacing={{ base: '1', md: '4' }}>
                             <HStack as={'nav'}
                                 spacing={1}
                                 m={0}
@@ -92,8 +92,12 @@ export default function Header() {
                                     <MenuDivider />
                                     {Connects.map((link) => (
                                         <MenuItem>
-                                            <Link href={link.href} _hover={{ textDecoration: "none" }}>
-                                                {link.name}
+                                            <Link
+                                            target={"__blank"}
+                                            referrerPolicy={"no-referrer"}
+                                            href={link.href}
+                                            _hover={{ textDecoration: "none" }}>
+                                            {link.name}
                                             </Link>
                                         </MenuItem>
                                     ))}
