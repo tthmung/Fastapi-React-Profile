@@ -51,21 +51,18 @@ async def project():
 async def login():
     return
 
-@app.post("/api/new/experience", response_description="add new experience", response_model=ExperienceModel)
+@app.post("/api/new/experience", response_description="Add new experience", response_model=ExperienceModel)
 async def createExperience(experience: ExperienceModel = Body(...)):
-    experience = jsonable_encoder(experience)
-    new_experience = await experience_collection.insert_one(experience)
-    created_experience = await experience_collection.find_one({"_id": new_experience.inserted_id})
-    return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_experience)
+    return
 
-@app.post("/api/new/project", response_description="add new project", response_model=ProjectModel)
+@app.post("/api/new/project", response_description="Add new project", response_model=ProjectModel)
 async def createProject():
     return
 
-@app.put("/api/update/experience")
+@app.put("/api/update/experience", response_description="Update experience", response_model=ExperienceModel)
 async def updateExperience():
     return
 
-@app.put("/api/update/project")
+@app.put("/api/update/project", response_description="Update project", response_model=ProjectModel)
 async def updateProject():
     return
