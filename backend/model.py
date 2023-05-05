@@ -37,7 +37,7 @@ class ExperienceModel(BaseModel):
                 "company": "CompanyName",
                 "position": "Software Developer",
                 "startDate": "Feb 2023",
-                "endDate": "Null",
+                "endDate": None,
                 "description": "I work as software developer",
                 "img": "123456789.png"
             }

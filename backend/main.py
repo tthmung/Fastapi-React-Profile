@@ -38,11 +38,15 @@ async def root():
 
 
 
-@app.get("/api/experience")
+@app.get("/api/experience", response_model=ExperienceModel)
 async def experience():
-    return {""}
+    try:
+        experience = experience_collection.find()
+        return experience
+    except Exception as e:
+        return {"Exception": e}
 
-@app.get("/api/project")
+@app.get("/api/project", response_model=ProjectModel)
 async def project():
     return {""}
 
@@ -52,8 +56,9 @@ async def login():
     return
 
 @app.post("/api/new/experience", response_description="Add new experience", response_model=ExperienceModel)
-async def createExperience():
-    return
+async def createExperience(experience: ExperienceModel = Body(...)):
+    experience_body = jsonable_encoder(experience)
+    return experience_body
 
 @app.post("/api/new/project", response_description="Add new project", response_model=ProjectModel)
 async def createProject():
@@ -66,8 +71,3 @@ async def updateExperience():
 @app.put("/api/update/project", response_description="Update project", response_model=ProjectModel)
 async def updateProject():
     return
-
-if __name__ == '__main__':
-    import uvicorn
-
-    uvicorn.run(app, port=8000, host='0.0.0.0')

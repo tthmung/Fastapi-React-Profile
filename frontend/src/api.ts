@@ -22,6 +22,25 @@ class API {
         let response = await this.client.get("/test");
         return response;
     }
+
+    getExperience = async () => {
+        let response = await this.client.get("/experience")
+        return response
+    }
+
+    postExperience = async () => {
+        const exampleData = {
+            "company": "SciQuel",
+            "position": "Software Developer",
+            "startDate": "2023-01-01T00:00:00",
+            "endDate": null,
+            "description": "I work as a software developer",
+            "img": "123456789.png"
+        }
+        let response = await this.client.post("/new/experience", exampleData);
+        return response;
+    }
+
 }
 
 export default API;
