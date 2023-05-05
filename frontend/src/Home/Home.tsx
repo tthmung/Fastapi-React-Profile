@@ -24,9 +24,7 @@ export default function Home() {
     return (
         <>
             <Header />
-            <Box>
-                {back}
-            </Box>
+            {back}
         </>
     );
 }

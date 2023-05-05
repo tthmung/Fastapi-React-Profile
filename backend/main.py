@@ -52,7 +52,7 @@ async def login():
     return
 
 @app.post("/api/new/experience", response_description="Add new experience", response_model=ExperienceModel)
-async def createExperience(experience: ExperienceModel = Body(...)):
+async def createExperience():
     return
 
 @app.post("/api/new/project", response_description="Add new project", response_model=ProjectModel)
@@ -66,3 +66,8 @@ async def updateExperience():
 @app.put("/api/update/project", response_description="Update project", response_model=ProjectModel)
 async def updateProject():
     return
+
+if __name__ == '__main__':
+    import uvicorn
+
+    uvicorn.run(app, port=8000, host='0.0.0.0')
