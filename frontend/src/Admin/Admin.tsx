@@ -16,8 +16,6 @@ export default function Admin() {
 
         const fetchData = async () => {
             let getExperience = api.getExperience();
-            let getProject = api.getProject();
-
             console.log(getExperience)
 
         }

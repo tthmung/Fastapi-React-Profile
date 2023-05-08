@@ -36,8 +36,8 @@ class ExperienceModel(BaseModel):
             "example": {
                 "company": "CompanyName",
                 "position": "Software Developer",
-                "startDate": "Feb 2023",
-                "endDate": None,
+                "startDate": "F2021-08-01T00:00:00",
+                "endDate": "F2021-08-01T00:00:00",
                 "description": "I work as software developer",
                 "img": "123456789.png"
             }
@@ -58,7 +58,7 @@ class ProjectModel(BaseModel):
         schema_extra = {
             "example": {
                 "title": "PorjectTitle",
-                "startDate": "Feb 2023",
+                "startDate": "F2021-08-01T00:00:00",
                 "description": "I work as software developer",
                 "img": "123456789.png",
                 "link": "https://localhost"

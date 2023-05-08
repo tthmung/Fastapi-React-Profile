@@ -6,8 +6,12 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import dotenv_values
 from model import *
+import logging
 
 env = dotenv_values(".env")
+
+
+logger = logging.getLogger(__name__)
 
 client = MongoClient(env["URI"], server_api=ServerApi('1'))
 experience_collection = client["FARM_Profile"]["Experiences"]
@@ -42,10 +46,14 @@ async def root():
 @app.get("/api/experience", response_model=ExperienceModel)
 async def experience():
     try:
-        experience = experience_collection.find()
-        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(experience))
+        experience = experience_collection.find().sort({"startDate": 1})
+        return JSONResponse(status_code=status.HTTP_200_OK, content=experience)
     except Exception as e:
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
+        logger.exception("Error retrieving experience from database")
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"message": e},
+        )
 
 @app.get("/api/project", response_model=ProjectModel)
 async def project():
