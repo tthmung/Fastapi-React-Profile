@@ -40,7 +40,7 @@ export default function Home() {
         const api = new API();
 
         const fetchData = async () => {
-            let response = await api.postExperience();
+            let response = await api.test();
             setBack(response.data);
         }
 

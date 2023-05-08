@@ -18,6 +18,7 @@ app = FastAPI(docs_url="/api/docs", openapi_url="/api")
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "http://localhost:8000"
 ]
 
 app.add_middleware(
@@ -42,13 +43,17 @@ async def root():
 async def experience():
     try:
         experience = experience_collection.find()
-        return experience
+        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(experience))
     except Exception as e:
-        return {"Exception": e}
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @app.get("/api/project", response_model=ProjectModel)
 async def project():
-    return {""}
+    try:
+        project = project_collection.find()
+        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(project))
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 
 @app.post("/api/login")
@@ -57,12 +62,23 @@ async def login():
 
 @app.post("/api/new/experience", response_description="Add new experience", response_model=ExperienceModel)
 async def createExperience(experience: ExperienceModel = Body(...)):
-    experience_body = jsonable_encoder(experience)
-    return experience_body
+    try:
+        experience_body = jsonable_encoder(experience)
+        new_experience = await experience_collection.insert_one(experience_body)
+        created_experience = await experience_collection.find_one({"_id": new_experience.inserted_id})
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_experience)
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @app.post("/api/new/project", response_description="Add new project", response_model=ProjectModel)
-async def createProject():
-    return
+async def createProject(project: ProjectModel = Body(...)):
+    try:
+        project_body = jsonable_encoder(project)
+        new_project = await project_collection.insert_one(project_body)
+        created_project = await project_collection.find_one({"_id", new_project.inserted_id})
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_project)
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @app.put("/api/update/experience", response_description="Update experience", response_model=ExperienceModel)
 async def updateExperience():
