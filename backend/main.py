@@ -5,19 +5,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import dotenv_values
+from typing import List
+from bson.json_util import dumps
 from model import *
-import logging
 
 env = dotenv_values(".env")
-
-
-logger = logging.getLogger(__name__)
 
 client = MongoClient(env["URI"], server_api=ServerApi('1'))
 experience_collection = client["FARM_Profile"]["Experiences"]
 project_collection = client["FARM_Profile"]["Projects"]
 
-app = FastAPI(docs_url="/api/docs", openapi_url="/api")
+app = FastAPI(docs_url="/api/docs", openapi_url="/api", version="0.1.0", debug=True)
 
 origins = [
     "http://localhost",
@@ -33,35 +31,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/api/test")
-async def root():
+@app.get("/api/experience", response_description="List of experiences", response_model=List[ExperienceModel])
+async def getExperience():
     try:
-        client.admin.command('ping')
-        return {"message": "Pinged your deployment. You successfully connected to MongoDB!"}
+        experience = experience_collection.find()
+        list_exp = list(experience)
+        json_data = dumps(list_exp)
+        return JSONResponse(status_code=status.HTTP_200_OK, content=json_data)
     except Exception as e:
-        return {"message": e}
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
-
-
-@app.get("/api/experience", response_model=ExperienceModel)
-async def experience():
-    try:
-        experience = experience_collection.find().sort({"startDate": 1})
-        return JSONResponse(status_code=status.HTTP_200_OK, content=experience)
-    except Exception as e:
-        logger.exception("Error retrieving experience from database")
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={"message": e},
-        )
-
-@app.get("/api/project", response_model=ProjectModel)
-async def project():
+@app.get("/api/project", response_description="List of project", response_model=List[ProjectModel])
+async def getProject():
     try:
         project = project_collection.find()
-        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(project))
+        list_proj = list(project)
+        json_data = dumps(list_proj)
+        return JSONResponse(status_code=status.HTTP_200_OK, content=json_data)
     except Exception as e:
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 
 @app.post("/api/login")

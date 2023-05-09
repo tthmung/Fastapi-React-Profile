@@ -23,8 +23,8 @@ class ExperienceModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     company: str = Field(...)
     position: str = Field(...)
-    startDate: datetime
-    endDate: Optional[datetime]
+    startDate: datetime = datetime.now()
+    endDate: Optional[datetime] = datetime.now()
     description: str = Field(...)
     img: str = Field(...)
 
@@ -36,8 +36,8 @@ class ExperienceModel(BaseModel):
             "example": {
                 "company": "CompanyName",
                 "position": "Software Developer",
-                "startDate": "F2021-08-01T00:00:00",
-                "endDate": "F2021-08-01T00:00:00",
+                "startDate": "2021-08-01T00:00:00",
+                "endDate": "2021-08-01T00:00:00",
                 "description": "I work as software developer",
                 "img": "123456789.png"
             }
@@ -46,7 +46,7 @@ class ExperienceModel(BaseModel):
 class ProjectModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     title: str = Field(...)
-    startDate: datetime # This is for ordering
+    startDate: datetime = datetime.now() # This is for ordering
     description: str = Field(...)
     img: str = Field(...)
     link: str = Field(...)
@@ -58,7 +58,7 @@ class ProjectModel(BaseModel):
         schema_extra = {
             "example": {
                 "title": "PorjectTitle",
-                "startDate": "F2021-08-01T00:00:00",
+                "startDate": "2021-08-01T00:00:00",
                 "description": "I work as software developer",
                 "img": "123456789.png",
                 "link": "https://localhost"

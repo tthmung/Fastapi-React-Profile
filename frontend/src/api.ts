@@ -17,12 +17,6 @@ class API {
         });
     }
 
-
-    test = async () => {
-        let response = await this.client.get("/test");
-        return response;
-    }
-
     getExperience = async () => {
         let response = await this.client.get("/experience");
         return response;
@@ -35,6 +29,7 @@ class API {
 
     postExperience = async (data: {}) => {
         let response = await this.client.post("/new/experience", data);
+
         return response;
     }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import API from '../api'
 import Header from './Header';
 import { Box } from '@chakra-ui/react';
+import { Console } from 'console';
 
 
 export default function Admin() {
@@ -16,8 +17,10 @@ export default function Admin() {
 
         const fetchData = async () => {
             let getExperience = api.getExperience();
-            console.log(getExperience)
-
+            getExperience.then((e) => {
+                console.log(e.data)
+            })
+            setExperiences(getExperience)
         }
 
 
