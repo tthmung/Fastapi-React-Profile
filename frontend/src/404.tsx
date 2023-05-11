@@ -26,7 +26,7 @@ export default function PageNotFound() {
         >
             <Box>
                 <Text
-                    fontSize={"9xl"}
+                    fontSize={{base: "7xl", md: "9xl"}}
                     fontWeight={"extrabold"}
                 >
                     404
