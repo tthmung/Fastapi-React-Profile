@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import API from '../api'
 import Header from './Header';
 import {
@@ -16,12 +17,14 @@ import {
     Tbody,
     Tr,
     Td,
-    Th
+    Th,
 } from '@chakra-ui/react';
 
 
 export default function Admin() {
 
+
+    let { collection, id, action } = useParams<string>();
     const [render, setRender] = useState<boolean>(true);
 
     const [experiences, setExperiences] = useState([{
@@ -84,6 +87,28 @@ export default function Admin() {
         }
     }
 
+    const renderTitles = (type: string, database: {}[]) => {
+
+        return (
+            <>
+            <p>
+                {id}, {action}
+            </p>
+                {collection === 'experience' && (
+                    <div>
+                        <p>This is the experience collection</p>
+
+                    </div>
+                )}
+                {collection === 'project' && (
+                    <div>
+                        <p>This is the project collection</p>
+                    </div>
+                )}
+            </>
+        );
+    }
+
     // Render loading
     const renderLoading = (
         <Box height={"100%"} width={"100%"} position={"absolute"} zIndex={20} bg={"black"}>
@@ -112,15 +137,25 @@ export default function Admin() {
                             <Table variant={"striped"} colorScheme={"red"}>
                                 <Thead bg={"gray.900"} textAlign={"center"}>
                                     <Tr>
-                                        <Th>Collection</Th>
+                                        <Th>
+                                            Collection
+                                        </Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
                                     <Tr>
-                                        <Td>Experiences</Td>
+                                        <Td>
+                                            <Link to="experience" relative='path'>
+                                                Experiences
+                                            </Link>
+                                        </Td>
                                     </Tr>
                                     <Tr>
-                                        <Td>Projects</Td>
+                                        <Td>
+                                            <Link to="project" relative='path'>
+                                                Projects
+                                            </Link>
+                                        </Td>
                                     </Tr>
                                 </Tbody>
                             </Table>
@@ -128,6 +163,7 @@ export default function Admin() {
                         )
                     }
                 </Box>
+                {renderTitles("experience", experiences)}
             </Box>
         </DarkMode>
     );
