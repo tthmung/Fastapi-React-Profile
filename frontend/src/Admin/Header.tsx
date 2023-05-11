@@ -1,38 +1,23 @@
 import {
     Box,
     Flex,
-    Text,
-    IconButton,
     Button,
     Stack,
-    Collapse,
-    Icon,
     Link,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    useBreakpointValue,
-    useDisclosure,
 } from '@chakra-ui/react';
-import {
-    HamburgerIcon,
-    CloseIcon,
-    ChevronDownIcon,
-    ChevronRightIcon,
-} from '@chakra-ui/icons';
 
 export default function Header() {
 
+
     return (
-        <Box>
+        <Box position={"absolute"} w={"100vw"} zIndex={"20"}>
             <Flex
-                bg={'gray.800'}
-                color={'white'}
                 minH={'60px'}
                 py={{ base: 2 }}
                 px={{ base: 4 }}
                 borderBottom={1}
                 borderStyle={'solid'}
+                bg={"gray.800"}
                 borderColor={'gray.900'}
                 align={'center'}
                 justify={"space-between"}>
@@ -47,18 +32,26 @@ export default function Header() {
                 <Stack
                     flex={{ base: 1, md: 0 }}
                     justify={'flex-end'}
+                    align={"center"}
                     direction={'row'}
                     spacing={6}>
+                    <Link
+                    href='/'
+                    color={"white"}
+                    >
+                        tthmung
+                    </Link>
                     <Button
                         as={'a'}
                         //   display={{ base: 'none', md: 'inline-flex' }}
                         fontSize={'sm'}
                         fontWeight={600}
-                        color={'white'}
-                        bg={'pink.400'}
+                        color={'black'}
+                        bg={'#00FFFF'}
                         href={'#'}
                         _hover={{
                             bg: 'pink.300',
+                            color: "white"
                         }}>
                         Sign In
                     </Button>

@@ -8,8 +8,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />}/>
-        <Route path='/admin' element={<Admin />}/>
+        <Route path="/" element={<Home />} />
+        <Route path='/admin' element={<Admin />}>
+          <Route path=":collection/:id/:type" element={<Admin />} />
+        </Route>
       </Routes>
     </Router>
   );
