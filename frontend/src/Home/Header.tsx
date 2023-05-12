@@ -93,9 +93,8 @@ export default function Header() {
                                     {Connects.map((link) => (
                                         <MenuItem>
                                             <Link
-                                            target={"__blank"}
-                                            referrerPolicy={"no-referrer"}
                                             href={link.href}
+                                            isExternal
                                             _hover={{ textDecoration: "none" }}>
                                             {link.name}
                                             </Link>

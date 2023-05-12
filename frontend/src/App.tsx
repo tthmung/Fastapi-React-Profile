@@ -13,8 +13,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path='/admin' element={<Admin />}>
           <Route path=":collection" element={<Admin />}>
-            <Route path=":id" element={<Admin />} />
-            <Route path="new/:type" element={<Admin />} />
+            <Route path="data/:id" element={<Admin />} />
+            <Route path="new" element={<Admin />} />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />}/>
