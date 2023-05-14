@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../api'
 import Header from './Header';
+import Loading from './Loading';
+
 import {
     Box,
     Flex,
-    Skeleton,
-    SkeletonCircle,
-    SkeletonText,
     DarkMode,
     Text,
     Table,
@@ -127,9 +126,10 @@ export default function Admin() {
                     <Tbody>
                         {database.map((val) => (
                             <Tr key={val._id} _hover={{
-                                bg: "#006ba1"
+                                bg: "#006ba1",
+                                cursor: "pointer"
                             }}
-                            onClick={() => navigate(collection + "/data/" + val._id)}
+                                onClick={() => navigate(collection + "/data/" + val._id)}
                             >
                                 <Td>
 
@@ -141,7 +141,14 @@ export default function Admin() {
                                 </Td>
                             </Tr>
                         ))}
-                        <Tr onClick={() => navigate(collection + "/new")}>
+                        <Tr
+                            key={collection + "/new"}
+                            _hover={{
+                                bg: "#006ba1",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => navigate(collection + "/new")}
+                        >
                             <Td>
                                 Add New
                             </Td>
@@ -152,21 +159,6 @@ export default function Admin() {
         );
     }
 
-    // Render loading
-    const renderLoading = (
-        <Box height={"100%"} width={"100%"} position={"absolute"} zIndex={20} bg={"black"}>
-            <Flex justifyContent={"center"} alignItems={"center"} height={"full"}>
-                <Box width={"75%"}>
-                    <Skeleton height="100px" />
-                    <br />
-                    <SkeletonCircle size="50" />
-                    <br />
-                    <SkeletonText noOfLines={10} skeletonHeight="2" />
-                </Box>
-            </Flex>
-        </Box>
-    );
-
     return (
         <DarkMode>
             <Box data-theme="dark"
@@ -175,7 +167,7 @@ export default function Admin() {
                 height={"100%"}>
                 <Header />
                 <Box height={"100vh"} paddingTop={"16"} bg={"gray.700"}>
-                    {render ? renderLoading :
+                    {render ? <Loading /> :
                         collection ?
                             collection === "experiences" ?
                                 renderTitles(experiences)
