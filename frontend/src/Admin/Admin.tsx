@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../api'
 import Header from './Header';
-import Loading from './Loading';
+import Loading from '../Components/Loading';
 
 import {
     Box,
