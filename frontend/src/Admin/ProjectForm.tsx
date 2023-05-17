@@ -1,7 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 
-export default function ProjectForm(data: {}, request: string) {
+interface componentProps {
+    data: any;
+    type: string;
+}
+export default function ProjectForm(prop: componentProps) {
 
 
     return (

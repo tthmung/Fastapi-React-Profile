@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import API from '../api'
 import Header from './Header';
 import Loading from '../Components/Loading';
@@ -28,6 +28,7 @@ interface databaseObject {
 
 export default function Admin() {
 
+    const location = useLocation();
     const navigate = useNavigate();
     let { collection, id } = useParams<string>();
     const [render, setRender] = useState<boolean>(true);
@@ -117,10 +118,14 @@ export default function Admin() {
 
         // If id of url then
         if (id) {
+            // Check if the given id is in the database
+            // This is fine for small database
+            if (database.some(obj => obj._id !== id)) {
+                navigate("/404");
+            }
 
-
-            const myData = database[0];
-            const myType = "example";
+            const myData = database[database.findIndex(obj => obj._id === id)];
+            const myType = "Update";
 
             return (
                 <Box mt="2" ml="2">
@@ -128,6 +133,16 @@ export default function Admin() {
                 </Box>
             );
 
+        } else if (location.pathname.includes("new")) {
+            const myType = "new";
+            return (
+                <Box mt="2" ml="2">
+                    {
+                        collection === "experiences" ? <ExperienceForm data="" type={myType} />
+                        : <ExperienceForm data="" type={myType} />
+                    }
+                </Box>
+            );
         } else {
             return (
                 <TableContainer width={{ md: "40%" }} ml={"2"} mt={"2"}>
