@@ -7,8 +7,19 @@ class api_helper {
         "Aug", "Sep", "Oct", "Nov", "Dec"];
     }
 
+    // Convert date to 'Month, YYYY'
     getDate = (d: Date) => {
-        return "" + this.months[d.getMonth()] + ", " + d.getFullYear();
+        const month = this.months[d.getMonth()];
+        const year = d.getFullYear();
+        return `${month}, ${year}`;
+    }
+
+    // Convert date to 'YYYY-MM-DD' format
+    convertToInput = (d: Date) => {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 }
 

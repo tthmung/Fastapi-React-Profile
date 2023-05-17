@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../api'
 import Header from './Header';
 import Loading from '../Components/Loading';
+import ExperienceForm from './ExperienceForm';
 
 import {
     Box,
@@ -106,57 +107,73 @@ export default function Admin() {
         </TableContainer>
     );
 
-    // Render title or company name based on collections
+    // Render title or company name based on collections.
+    // Will also render the form
     const renderTitles = (database: any[]) => {
 
         if (collection !== "experiences" && collection !== "projects") {
             navigate("/404");
         }
 
-        return (
-            <TableContainer width={{ md: "40%" }} ml={"2"} mt={"2"}>
-                <Table variant={"striped"} colorScheme={"telegram"}>
-                    <Thead bg={"gray.900"} textAlign={"center"}>
-                        <Tr key={collection}>
-                            <Th>
-                                {collection}
-                            </Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {database.map((val) => (
-                            <Tr key={val._id} _hover={{
-                                bg: "#006ba1",
-                                cursor: "pointer"
-                            }}
-                                onClick={() => navigate(collection + "/data/" + val._id)}
+        // If id of url then
+        if (id) {
+
+
+            const myData = database[0];
+            const myType = "example";
+
+            return (
+                <Box mt="2" ml="2">
+                    <ExperienceForm data={myData} type={myType} />
+                </Box>
+            );
+
+        } else {
+            return (
+                <TableContainer width={{ md: "40%" }} ml={"2"} mt={"2"}>
+                    <Table variant={"striped"} colorScheme={"telegram"}>
+                        <Thead bg={"gray.900"} textAlign={"center"}>
+                            <Tr key={collection}>
+                                <Th>
+                                    {collection}
+                                </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {database.map((val) => (
+                                <Tr key={val._id} _hover={{
+                                    bg: "#006ba1",
+                                    cursor: "pointer"
+                                }}
+                                    onClick={() => navigate(collection + "/data/" + val._id)}
+                                >
+                                    <Td>
+
+                                        {collection === "experiences" ?
+                                            val.company
+                                            :
+                                            val.title
+                                        }
+                                    </Td>
+                                </Tr>
+                            ))}
+                            <Tr
+                                key={collection + "/new"}
+                                _hover={{
+                                    bg: "#006ba1",
+                                    cursor: "pointer"
+                                }}
+                                onClick={() => navigate(collection + "/new")}
                             >
                                 <Td>
-
-                                    {collection === "experiences" ?
-                                        val.company
-                                        :
-                                        val.title
-                                    }
+                                    Add New
                                 </Td>
                             </Tr>
-                        ))}
-                        <Tr
-                            key={collection + "/new"}
-                            _hover={{
-                                bg: "#006ba1",
-                                cursor: "pointer"
-                            }}
-                            onClick={() => navigate(collection + "/new")}
-                        >
-                            <Td>
-                                Add New
-                            </Td>
-                        </Tr>
-                    </Tbody>
-                </Table>
-            </TableContainer>
-        );
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            );
+        }
     }
 
     return (
@@ -169,10 +186,7 @@ export default function Admin() {
                 <Box height={"100vh"} paddingTop={"16"} bg={"gray.700"}>
                     {render ? <Loading /> :
                         collection ?
-                            collection === "experiences" ?
-                                renderTitles(experiences)
-                                :
-                                renderTitles(projects)
+                            renderTitles(collection === "experiences" ? experiences : projects)
                             : renderCollections
                     }
                 </Box>
