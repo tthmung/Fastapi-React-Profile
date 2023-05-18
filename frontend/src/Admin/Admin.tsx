@@ -108,17 +108,17 @@ export default function Admin() {
         if (collection !== "experiences" && collection !== "projects") {
             navigate("/404");
         }
-
         // If id of url then
         if (id) {
             // Check if the given id is in the database
             // This is fine for small database
-            if (database.some(obj => obj._id !== id)) {
-                navigate("/404");
-            }
 
             const myData = database[database.findIndex(obj => obj._id === id)];
             const myType = "Update";
+
+            if (myData === null) {
+                navigate("/404");
+            }
 
             return (
                 <Box mt="2" ml="2">

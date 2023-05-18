@@ -38,6 +38,11 @@ class API {
         return response;
     }
 
+    uploadFile = async () => {
+        data: {
+
+        }
+    }
 }
 
 export default API;
