@@ -14,3 +14,6 @@ backend/.env
 
 #vscode config
 .vscode/*
+
+# Ignore all .pyc file
+*.pyc
