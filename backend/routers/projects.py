@@ -13,7 +13,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
 @router.get("/", response_description="List of project", response_model=List[ProjectModel])
 async def read_projects():
     try:
@@ -37,9 +36,20 @@ async def create_projects(project: ProjectModel = Body(...)):
 
 
 @router.put("/update", response_description="Update project", response_model=ProjectModel)
-async def update_projects():
-    return
+async def update_projects(id: str | None = None, project: ProjectModel = Body(...)):
+    try:
+        project_body = jsonable_encoder(project)
+        filter = {"_id": id}
+        update = {"$set": {key: value for key, value in project_body.items() if key != "_id"}}
+        project_collection.update_one(filter=filter, update=update)
+        return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="success")
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @router.delete("/delete", response_description="delete project", response_model=ProjectModel)
-async def delete_projects():
-    return
+async def delete_projects(id: str | None = None):
+    try:
+        deleted_project = project_collection.delete_one({"_id": id})
+        return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content=deleted_project.acknowledged)
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)

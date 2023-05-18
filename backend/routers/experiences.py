@@ -37,9 +37,20 @@ async def create_experience(experience: ExperienceModel = Body(...)):
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @router.put("/update", response_description="Update experience", response_model=ExperienceModel)
-async def update_Experience():
-    return
+async def update_Experience(id: str | None = None, experience: ExperienceModel = Body(...)):
+    try:
+        experience_body = jsonable_encoder(experience)
+        filter = {"_id": id}
+        update = {"$set": {key: value for key, value in experience_body.items() if key != "_id"}}
+        experience_collection.update_one(filter=filter, update=update)
+        return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="success")
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @router.delete("/delete", response_description="delete experience", response_model=ExperienceModel)
-async def delete_experience():
-    return
+async def delete_experience(id: str | None = None):
+    try:
+        deleted_experience = experience_collection.delete_one({"_id": id})
+        return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content=deleted_experience.acknowledged)
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
