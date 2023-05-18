@@ -3,6 +3,7 @@ venv/*
 
 #python cache
 backend/__pycache__/*
+backend/routers/__pycache__/*
 
 #Backend env
 backend/.env
