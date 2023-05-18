@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from bson.json_util import dumps
 from typing import List
 from models.project import ProjectModel
-from backend.main import project_collection
+from config import project_collection
 
 router = APIRouter(
     prefix="/api/projects",
@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/", response_description="List of project", response_model=List[ProjectModel])
-async def getProject():
+async def read_projects():
     try:
         project = project_collection.find()
         list_proj = list(project)
@@ -26,7 +26,7 @@ async def getProject():
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 @router.post("/new", response_description="Add new project", response_model=ProjectModel)
-async def createProject(project: ProjectModel = Body(...)):
+async def create_projects(project: ProjectModel = Body(...)):
     try:
         project_body = jsonable_encoder(project)
         new_project = await project_collection.insert_one(project_body)
@@ -37,9 +37,9 @@ async def createProject(project: ProjectModel = Body(...)):
 
 
 @router.put("/update", response_description="Update project", response_model=ProjectModel)
-async def updateProject():
+async def update_projects():
     return
 
 @router.delete("/delete", response_description="delete project", response_model=ProjectModel)
-async def deleteProject():
+async def delete_projects():
     return

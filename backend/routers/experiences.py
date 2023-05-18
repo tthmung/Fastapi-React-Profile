@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from bson.json_util import dumps
 from typing import List
 from models.experience import ExperienceModel
-from main import *
+from config import experience_collection
 
 router = APIRouter(
     prefix="/api/experiences",
@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/", response_description="List of experiences", response_model=List[ExperienceModel])
-async def getExperience():
+async def read_experiences():
     try:
         experience = experience_collection.find()
         list_exp = list(experience)
@@ -27,7 +27,7 @@ async def getExperience():
 
 
 @router.post("/new", response_description="Add new experience", response_model=ExperienceModel)
-async def createExperience(experience: ExperienceModel = Body(...)):
+async def create_experience(experience: ExperienceModel = Body(...)):
     try:
         experience_body = jsonable_encoder(experience)
         new_experience = await experience_collection.insert_one(experience_body)
@@ -37,9 +37,9 @@ async def createExperience(experience: ExperienceModel = Body(...)):
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @router.put("/update", response_description="Update experience", response_model=ExperienceModel)
-async def updateExperience():
+async def update_Experience():
     return
 
 @router.delete("/delete", response_description="delete experience", response_model=ExperienceModel)
-async def deleteExperience():
+async def delete_experience():
     return
