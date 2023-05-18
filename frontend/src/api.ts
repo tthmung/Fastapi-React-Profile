@@ -18,23 +18,23 @@ class API {
     }
 
     getExperience = async () => {
-        let response = await this.client.get("/experience");
+        let response = await this.client.get("/experiences");
         return response;
     }
 
     getProject = async () => {
-        let response = await this.client.get("/project");
+        let response = await this.client.get("/projects");
         return response;
     }
 
     postExperience = async (data: {}) => {
-        let response = await this.client.post("/new/experience", data);
+        let response = await this.client.post("/new/experiences", data);
 
         return response;
     }
 
     postProject = async (data: {}) => {
-        let response = await this.client.post("/new/project", data);
+        let response = await this.client.post("/new/projects", data);
         return response;
     }
 

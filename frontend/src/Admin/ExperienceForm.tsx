@@ -12,6 +12,7 @@ import {
     InputGroup,
     Stack
 } from '@chakra-ui/react';
+import API from "../api"
 import api_helper from "../api_helper";
 
 interface componentProps {
@@ -23,16 +24,28 @@ export default function ExperienceForm(props: componentProps) {
 
     const navigate = useNavigate();
     const helper = new api_helper();
+    const api = new API();
 
     const [company, setCompany] = useState<string>(props.data.company);
     const [position, setPosition] = useState<string>(props.data.position);
     const [startDate, setStartDate] = useState<string>(helper.convertToInput(new Date(props.data.startDate)));
     const [endDate, setEndDate] = useState<string>(props.data.endDate ? helper.convertToInput(new Date(props.data.endDate)) : "");
     const [description, setDescription] = useState<string>(props.data.description);
+    const [selectedFile, setSelectedFile] = useState<any>();
 
+    console.log(selectedFile.name);
 
     const handleSubmit = () => {
-
+        if (props.type === "new") {
+            const data = {
+                company: company,
+                position: position,
+                startDate: startDate,
+                endDate: endDate,
+                description: description,
+                img: selectedFile.name
+            }
+        }
     }
 
     const handleDelete = () => {
@@ -47,7 +60,7 @@ export default function ExperienceForm(props: componentProps) {
                 </Button>
             </Box>
             <Box width={"50%"}>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <Stack spacing={4}>
                         <FormControl isRequired>
                             <FormLabel>Company</FormLabel>
@@ -71,7 +84,9 @@ export default function ExperienceForm(props: componentProps) {
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel>Image</FormLabel>
-                            <Input type="file" accept="image/*" width={"min-content"} border={"none"} />
+                            <Input type="file" accept="image/*" width={"min-content"} border={"none"}
+                            onChange={(e) => setSelectedFile(e.target.files ? e.target.files[0] : null)}
+                            />
                         </FormControl>
                         <Flex justifyContent={"space-between"}>
                             <Input type="submit" value={props.type === "new" ? "Add New" : "Update"} width={"24"} bg={"blue.300"} _hover={{ bg: "blue.400" }} textColor={"black"} />

@@ -1,3 +1,5 @@
+import { v4 as uuidv4  } from 'uuid';
+
 
 class api_helper {
     months: Array<string>;
@@ -20,6 +22,13 @@ class api_helper {
         const month = String(d.getMonth() + 1).padStart(2, '0');
         const day = String(d.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+
+    // Generate a unique identifier for file names
+    generateRandomFileName = (originalName: string) => {
+        const uniqueId = uuidv4();
+        const extension = originalName.split('.').pop();
+        return `${uniqueId}.${extension}`
     }
 }
 

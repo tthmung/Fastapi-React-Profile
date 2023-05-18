@@ -19,13 +19,6 @@ import {
     Th,
 } from '@chakra-ui/react';
 
-
-interface databaseObject {
-    title: string;
-    company: string;
-    _id: string;
-}
-
 export default function Admin() {
 
     const location = useLocation();
