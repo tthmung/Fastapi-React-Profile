@@ -5,7 +5,7 @@ class API {
     apiUrl: string;
 
     constructor() {
-        this.apiUrl = "http://localhost:8000/api/";
+        this.apiUrl = "http://localhost:8000/";
 
         // Create axios client, pre-configured with baseURL
         this.client = axios.create({
@@ -17,34 +17,58 @@ class API {
         });
     }
 
-    getExperience = async () => {
-        let response = await this.client.get("/experiences");
-        return response;
-    }
-
     getProject = async () => {
-        let response = await this.client.get("/projects");
+        let response = await this.client.get("/api/projects/");
         return response;
     }
 
-    postExperience = async (data: any) => {
-        let response = await this.client.post("/experiences/new", data);
+    createProject = async (data: any) => {
+        let response = await this.client.post("/api/projects/new", data);
+        return response;
+    }
 
+    updateProject = async (data: any, id: string) => {
+        let response = await this.client.put(`/api/projects/update?id=${id}`, data);
+        return response;
+    }
+
+    deleteProject = async (id: string) => {
+        let response = await this.client.delete(`/api/projects/delete?id=${id}`);
+        return response;
+    }
+
+    getExperience = async () => {
+        let response = await this.client.get("/api/experiences/");
+        return response;
+    }
+
+    createExperience = async (data: any) => {
+        let response = await this.client.post("/api/experiences/new", data);
         return response;
     }
 
     updateExperience = async (data: any, id: string) => {
-        let response = await this.client.put(`/experiences/update?id=${id}`, data);
+        let response = await this.client.put(`/api/experiences/update?id=${id}`, data);
         return response;
     }
 
-    postProject = async (data: any) => {
-        let response = await this.client.post("/projects/new", data);
+    deleteExperience = async (id: string) => {
+        let response = await this.client.put(`/api/experiences/delete?id=${id}`);
         return response;
     }
 
-    uploadFile = async (data: FormData, id:string) => {
+    uploadFile = async (data: FormData, id: string) => {
         let response = await this.client.post(`/files/upload?id=${id}`, data);
+        return response;
+    }
+
+    updateFile = async (data: FormData, id: string) => {
+        let response = await this.client.put(`/api/files/update?id=${id}`, data);
+        return response;
+    }
+
+    deleteFile =async (id: string) => {
+        let response = await this.client.delete(`/api/files/delete?id=${id}`);
         return response;
     }
 }

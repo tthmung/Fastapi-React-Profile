@@ -69,7 +69,7 @@ export default function ExperienceForm(props: componentProps) {
 
             setLoading(true);
 
-            api.postExperience(data)
+            api.createExperience(data)
                 .then((e) => {
                     alert(e.status);
                     if (e.status === 201) {
