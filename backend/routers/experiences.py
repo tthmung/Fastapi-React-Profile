@@ -25,13 +25,12 @@ async def read_experiences():
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 
-
 @router.post("/new", response_description="Add new experience", response_model=ExperienceModel)
 async def create_experience(experience: ExperienceModel = Body(...)):
     try:
         experience_body = jsonable_encoder(experience)
-        new_experience = await experience_collection.insert_one(experience_body)
-        created_experience = await experience_collection.find_one({"_id": new_experience.inserted_id})
+        new_experience = experience_collection.insert_one(experience_body)
+        created_experience = experience_collection.find_one({"_id": new_experience.inserted_id})
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_experience)
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
@@ -41,6 +40,7 @@ async def update_Experience(id: str | None = None, experience: ExperienceModel =
     try:
         experience_body = jsonable_encoder(experience)
         filter = {"_id": id}
+        # Experience body contain "_id" so filter that out
         update = {"$set": {key: value for key, value in experience_body.items() if key != "_id"}}
         experience_collection.update_one(filter=filter, update=update)
         return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="success")

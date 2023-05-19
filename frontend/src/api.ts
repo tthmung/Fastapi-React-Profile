@@ -27,21 +27,25 @@ class API {
         return response;
     }
 
-    postExperience = async (data: {}) => {
-        let response = await this.client.post("/new/experiences", data);
+    postExperience = async (data: any) => {
+        let response = await this.client.post("/experiences/new", data);
 
         return response;
     }
 
-    postProject = async (data: {}) => {
-        let response = await this.client.post("/new/projects", data);
+    updateExperience = async (data: any, id: string) => {
+        let response = await this.client.put(`/experiences/update?id=${id}`, data);
         return response;
     }
 
-    uploadFile = async () => {
-        data: {
+    postProject = async (data: any) => {
+        let response = await this.client.post("/projects/new", data);
+        return response;
+    }
 
-        }
+    uploadFile = async (data: FormData, id:string) => {
+        let response = await this.client.post(`/files/upload?id=${id}`, data);
+        return response;
     }
 }
 

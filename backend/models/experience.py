@@ -9,7 +9,7 @@ class ExperienceModel(BaseModel):
     company: str = Field(...)
     position: str = Field(...)
     startDate: datetime = datetime.now()
-    endDate: Optional[datetime] = datetime.now()
+    endDate: Optional[datetime] = None
     description: str = Field(...)
     img: str = Field(...)
 

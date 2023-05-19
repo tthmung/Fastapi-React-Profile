@@ -43,7 +43,7 @@ async def update_file(file: UploadFile, id: str | None = None, curr_file: str | 
         with open(file_location, "wb") as f:
             f.write(await file.read())
 
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content=new_filename)
+        return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content=new_filename)
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
@@ -61,7 +61,7 @@ async def delete_file(id: str | None = None, filename: str | None = None):
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
-
+# Generate a new file name to avoid duplication
 def generate_new_name(file: UploadFile):
     # generate a timestamp for unique file name
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")

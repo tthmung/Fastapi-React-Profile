@@ -28,8 +28,8 @@ async def read_projects():
 async def create_projects(project: ProjectModel = Body(...)):
     try:
         project_body = jsonable_encoder(project)
-        new_project = await project_collection.insert_one(project_body)
-        created_project = await project_collection.find_one({"_id", new_project.inserted_id})
+        new_project = project_collection.insert_one(project_body)
+        created_project = project_collection.find_one({"_id", new_project.inserted_id})
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_project)
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
@@ -40,6 +40,7 @@ async def update_projects(id: str | None = None, project: ProjectModel = Body(..
     try:
         project_body = jsonable_encoder(project)
         filter = {"_id": id}
+        # Update body contain "_id" so filter that out
         update = {"$set": {key: value for key, value in project_body.items() if key != "_id"}}
         project_collection.update_one(filter=filter, update=update)
         return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="success")
