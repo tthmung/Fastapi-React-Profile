@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import Response, JSONResponse
-from fastapi import  Body, status
+from fastapi import Body, status
 from fastapi.encoders import jsonable_encoder
 from bson.json_util import dumps
 from typing import List
@@ -16,7 +16,7 @@ router = APIRouter(
 @router.get("/", response_description="List of project", response_model=List[ProjectModel])
 async def read_projects():
     try:
-        project = await project_collection.find()
+        project = project_collection.find()
         list_proj = list(project)
         json_data = dumps(list_proj)
         return JSONResponse(status_code=status.HTTP_200_OK, content=json_data)
@@ -28,9 +28,8 @@ async def read_projects():
 async def create_projects(project: ProjectModel = Body(...)):
     try:
         project_body = jsonable_encoder(project)
-        new_project = await project_collection.insert_one(project_body)
-        created_project = await project_collection.find_one({"_id", new_project.inserted_id})
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_project)
+        new_project = project_collection.insert_one(project_body)
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=new_project.inserted_id)
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
@@ -42,7 +41,7 @@ async def update_projects(id: str | None = None, project: UpdateProjectModel = B
         filter = {"_id": id}
         # Update body contain "_id" so filter that out
         update = {"$set": project_body}
-        await project_collection.update_one(filter=filter, update=update)
+        project_collection.update_one(filter=filter, update=update)
         return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="success")
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
@@ -50,7 +49,7 @@ async def update_projects(id: str | None = None, project: UpdateProjectModel = B
 @router.delete("/delete", response_description="delete project", response_model=ProjectModel)
 async def delete_projects(id: str | None = None):
     try:
-        deleted_project = await project_collection.delete_one({"_id": id})
+        deleted_project = project_collection.delete_one({"_id": id})
         return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content=deleted_project.acknowledged)
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)

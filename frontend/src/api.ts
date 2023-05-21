@@ -58,7 +58,7 @@ class API {
     }
 
     uploadFile = async (data: FormData, id: string) => {
-        let response = await this.client.post(`/files/upload?id=${id}`, data);
+        let response = await this.client.post(`/api/files/upload?id=${id}`, data);
         return response;
     }
 

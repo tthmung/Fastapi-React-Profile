@@ -69,42 +69,31 @@ export default function ExperienceForm(props: componentProps) {
 
             setLoading(true);
 
-            api.createExperience(data)
-                .then((e) => {
-                    alert(e.status);
-                    if (e.status === 201) {
-                        id = e.data;
-                        api.uploadFile(formData, id).then((e) => {
-                            alert(e.status);
-                            if (e.status === 201) {
-                                data.img = e.data;
-                                api.updateExperience(data, id).then(() => {
-                                    if (e.status === 202) {
-                                        setLoading(false);
-                                        toast({
-                                            title: 'Experience created.',
-                                            description: 'Congrats on gaining new experience',
-                                            status: 'success',
-                                            duration: 3000,
-                                            isClosable: true,
-                                        });
-                                    } else {
-                                        throw new Error('Experience update failed');
-                                    }
-                                })
-                            } else {
-                                throw new Error('File upload failed');
-                            }
-                        })
-                    } else {
-                        throw new Error('Upload failed');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    // Handle error and display appropriate error message using toast or other error handling mechanism
-                });
-
+            api.createExperience(data).then((e) => {
+                if (e.status === 201) {
+                    id = e.data;
+                    return api.uploadFile(formData, id);
+                } else {
+                    throw new Error("Create failed");
+                }
+            }).then((e) => {
+                if (e.status === 201) {
+                    data.img = e.data;
+                    return api.updateExperience(data, id);
+                } else {
+                    throw new Error("Img creation failed");
+                }
+            }
+            ).then((e) => {
+                if (e.status === 202) {
+                    setLoading(false);
+                    console.log("Upload sucessful");
+                } else {
+                    throw new Error("Update failed");
+                }
+            }).catch((e) => {
+                console.error(e);
+            });
         }
     }
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import Response, JSONResponse
-from fastapi import  Body, status
+from fastapi import Body, status
 from fastapi.encoders import jsonable_encoder
 from bson.json_util import dumps
 from typing import List
@@ -14,10 +14,14 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_description="List of experiences", response_model=List[ExperienceModel])
+@router.get(
+    "/",
+    response_description="List of experiences",
+    response_model=List[ExperienceModel],
+)
 async def read_experiences():
     try:
-        experience = await experience_collection.find()
+        experience = experience_collection.find()
         list_exp = list(experience)
         json_data = dumps(list_exp)
         return JSONResponse(status_code=status.HTTP_200_OK, content=json_data)
@@ -25,18 +29,28 @@ async def read_experiences():
         return Response(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 
-@router.post("/new", response_description="Add new experience", response_model=ExperienceModel)
+@router.post(
+    "/new", response_description="Add new experience", response_model=ExperienceModel
+)
 async def create_experience(experience: ExperienceModel = Body(...)):
     try:
         experience_body = jsonable_encoder(experience)
-        new_experience = await experience_collection.insert_one(experience_body)
-        created_experience = await experience_collection.find_one({"_id": new_experience.inserted_id})
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_experience)
+        new_experience = experience_collection.insert_one(experience_body)
+        return JSONResponse(
+            status_code=status.HTTP_201_CREATED, content=new_experience.inserted_id
+        )
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
-@router.put("/update", response_description="Update experience", response_model=UpdateExperienceModel)
-async def update_Experience(id: str | None = None, experience: UpdateExperienceModel = Body(...)):
+
+@router.put(
+    "/update",
+    response_description="Update experience",
+    response_model=UpdateExperienceModel,
+)
+async def update_Experience(
+    id: str | None = None, experience: UpdateExperienceModel = Body(...)
+):
     try:
         experience_body = jsonable_encoder(experience)
         filter = {"_id": id}
@@ -47,10 +61,16 @@ async def update_Experience(id: str | None = None, experience: UpdateExperienceM
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
-@router.delete("/delete", response_description="delete experience", response_model=ExperienceModel)
+
+@router.delete(
+    "/delete", response_description="delete experience", response_model=ExperienceModel
+)
 async def delete_experience(id: str | None = None):
     try:
-        deleted_experience = await experience_collection.delete_one({"_id": id})
-        return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content=deleted_experience.acknowledged)
+        deleted_experience = experience_collection.delete_one({"_id": id})
+        return JSONResponse(
+            status_code=status.HTTP_202_ACCEPTED,
+            content=deleted_experience.acknowledged,
+        )
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
