@@ -15,7 +15,7 @@ import API from "../api"
 import api_helper from "../api_helper";
 import Loading from "../Components/Loading";
 
-import { componentProps, projectData, projectInterface } from "./Interface";
+import { componentProps, projectData, projectInterface } from "../Components/Interface";
 
 export default function ProjectForm(props: componentProps) {
 

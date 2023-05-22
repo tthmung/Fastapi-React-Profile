@@ -4,7 +4,7 @@ import API from '../api'
 import Header from './Header';
 import Loading from '../Components/Loading';
 import ExperienceForm from './ExperienceForm';
-import { experienceInterface, projectInterface } from './Interface'
+import { experienceInterface, projectInterface } from '../Components/Interface'
 
 import {
     Box,

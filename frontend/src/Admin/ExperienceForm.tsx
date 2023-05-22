@@ -14,7 +14,7 @@ import {
 import API from "../api"
 import api_helper from "../api_helper";
 import Loading from "../Components/Loading";
-import { componentProps, experienceData, experienceInterface } from "./Interface";
+import { componentProps, experienceData, experienceInterface } from "../Components/Interface";
 
 export default function ExperienceForm(props: componentProps) {
 

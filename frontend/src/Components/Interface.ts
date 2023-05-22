@@ -21,7 +21,7 @@ export interface projectInterface {
 // Interface for componentProps for forms
 export interface componentProps {
     data: experienceInterface | projectInterface;
-    type: string;
+    type?: string;
 }
 
 // Interface for uploading and updating data

@@ -16,7 +16,8 @@ import Header from './Header';
 import Card from './Card';
 
 
-export default function Home() {
+export default function
+    Home() {
 
     const [back, setBack] = useState({});
     const [mousePosition, setMousePosition] = useState({ x: Number, y: Number });
@@ -77,19 +78,24 @@ export default function Home() {
 
                 {/* About ME */}
 
-                <Flex
+                {/* <Flex
                     w={"80%"}
                     m={"auto"}
-                    bg={useColorModeValue("#b5b6b7", "#f2f3f4")}
-                    border={1}
-                    borderColor={"transparent"}
-                    borderRadius={"3xl"}
-                    justifyContent={"flex-between"}
+                    justifyContent={"space-between"}
                 >
-                    <Box w="48%">
-                        <Box p={"10"}>
-                            <Text fontSize={"3xl"} fontFamily={"copse"}>Meet Thawng</Text>
-                            <Text fontSize={"2xl"} fontFamily={"copse"}>
+                    <Box w="48%" position="relative">
+                        <Box
+                            p="10"
+                            backdropFilter="blur(10px)"
+                            backgroundColor="rgba(255, 255, 255, 0.5)"
+                            border={1}
+                            borderColor="transparent"
+                            borderRadius="2xl"
+                            position="relative"
+                            zIndex="1"
+                        >
+                            <Text fontSize="3xl" fontFamily="copse">Meet Thawng</Text>
+                            <Text fontSize="2xl" fontFamily="copse">
                                 <br />
                                 I'm a software developer currently pursuing a degree in computer science at Michigan Technological University. I'm passionate about creating high-quality, ethical code that makes a positive impact on people's lives.
                                 <br /><br />
@@ -99,10 +105,7 @@ export default function Home() {
                             </Text>
                         </Box>
                     </Box>
-                    <Box w="48%">
-
-                    </Box>
-                </Flex>
+                </Flex> */}
 
             </Box>
         </>
