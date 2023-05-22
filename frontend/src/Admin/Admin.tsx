@@ -17,6 +17,7 @@ import {
     Td,
     Th,
 } from '@chakra-ui/react';
+import ProjectForm from './ProjectForm';
 
 export default function Admin() {
 
@@ -115,9 +116,14 @@ export default function Admin() {
             const myData = database[database.findIndex(obj => obj._id === id)];
             const myType = "Update";
 
+
             return (
                 <Box mt="2" ml="2">
-                    <ExperienceForm data={myData} type={myType} />
+                    {collection === "experiences" ?
+                        <ExperienceForm data={myData} type={myType} />
+                        :
+                        <ProjectForm data={myData} type={myType} />
+                    }
                 </Box>
             );
 
@@ -131,12 +137,22 @@ export default function Admin() {
                 endDate: "",
                 description: "",
                 img: ""
-              };
+            };
+            const emptyProject: projectInterface = {
+                _id: "",
+                title: "",
+                orderDate: "",
+                description: "",
+                img: "",
+                link: ""
+            }
             return (
                 <Box mt="2" ml="2">
                     {
-                        collection === "experiences" ? <ExperienceForm data={emptyExperience} type={myType} />
-                        : <ExperienceForm data={emptyExperience} type={myType} />
+                        collection === "experiences" ?
+                            <ExperienceForm data={emptyExperience} type={myType} />
+                            :
+                            <ProjectForm data={emptyProject} type={myType} />
                     }
                 </Box>
             );

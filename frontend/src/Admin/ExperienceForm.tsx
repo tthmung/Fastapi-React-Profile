@@ -14,7 +14,7 @@ import {
 import API from "../api"
 import api_helper from "../api_helper";
 import Loading from "../Components/Loading";
-import { componentProps, experienceData } from "./Interface";
+import { componentProps, experienceData, experienceInterface } from "./Interface";
 
 export default function ExperienceForm(props: componentProps) {
 
@@ -32,12 +32,11 @@ export default function ExperienceForm(props: componentProps) {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log("404");
         if (props.data) {
-            setCompany(props.data.company);
-            setPosition(props.data.position);
-            setStartDate(helper.convertToInput(new Date(props.data.startDate)));
-            setEndDate(props.data.endDate ? helper.convertToInput(new Date(props.data.endDate)) : "");
+            setCompany((props.data as experienceInterface).company);
+            setPosition((props.data as experienceInterface).position);
+            setStartDate(helper.convertToInput(new Date((props.data as experienceInterface).startDate)));
+            setEndDate((props.data as experienceInterface).endDate ? helper.convertToInput(new Date((props.data as experienceInterface).endDate)) : "");
             setDescription(props.data.description);
         } else {
             navigate("/404");

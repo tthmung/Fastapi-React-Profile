@@ -1,3 +1,4 @@
+// Interface for overall interface
 export interface experienceInterface {
     _id: string,
     company: string,
@@ -17,11 +18,13 @@ export interface projectInterface {
     link: string
 }
 
+// Interface for componentProps for forms
 export interface componentProps {
-    data: any;
+    data: experienceInterface | projectInterface;
     type: string;
 }
 
+// Interface for uploading and updating data
 export interface experienceData {
     company: string;
     position: string;
