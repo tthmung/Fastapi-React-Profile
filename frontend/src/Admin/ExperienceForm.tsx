@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import {
     Box,
@@ -14,39 +14,49 @@ import {
 import API from "../api"
 import api_helper from "../api_helper";
 import Loading from "../Components/Loading";
-
-interface componentProps {
-    data: any;
-    type: string;
-}
-
-interface experienceData {
-    company: string;
-    position: string;
-    startDate: string;
-    endDate?: string;
-    description: string;
-    img: string;
-}
+import { componentProps, experienceData } from "./Interface";
 
 export default function ExperienceForm(props: componentProps) {
 
     const navigate = useNavigate();
-    const helper = new api_helper();
+    const helper = useMemo(() => new api_helper(), []);
     const api = new API();
     const toast = useToast();
 
-    const [company, setCompany] = useState<string>(props.data.company);
-    const [position, setPosition] = useState<string>(props.data.position);
-    const [startDate, setStartDate] = useState<string>(helper.convertToInput(new Date(props.data.startDate)));
-    const [endDate, setEndDate] = useState<string>(props.data.endDate ? helper.convertToInput(new Date(props.data.endDate)) : "");
-    const [description, setDescription] = useState<string>(props.data.description);
+    const [company, setCompany] = useState<string>("");
+    const [position, setPosition] = useState<string>("");
+    const [startDate, setStartDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
     const [selectedFile, setSelectedFile] = useState<any>(null);
-
     const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        console.log("404");
+        if (props.data) {
+            setCompany(props.data.company);
+            setPosition(props.data.position);
+            setStartDate(helper.convertToInput(new Date(props.data.startDate)));
+            setEndDate(props.data.endDate ? helper.convertToInput(new Date(props.data.endDate)) : "");
+            setDescription(props.data.description);
+        } else {
+            navigate("/404");
+        }
+    }, [helper, navigate, props.data]);
+
+    const resultOutput = (msg: string, code: "success" | "error" | "warning" | "info" | "loading" | undefined) => {
+        setLoading(false);
+        toast({
+            title: msg,
+            status: code,
+            isClosable: true,
+        });
+        navigate(-1);
+    }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
 
         if (props.type === "new") {
 
@@ -67,8 +77,6 @@ export default function ExperienceForm(props: componentProps) {
 
             let id = "";
 
-            setLoading(true);
-
             api.createExperience(data).then((e) => {
                 if (e.status === 201) {
                     id = e.data;
@@ -86,20 +94,75 @@ export default function ExperienceForm(props: componentProps) {
             }
             ).then((e) => {
                 if (e.status === 202) {
-                    setLoading(false);
-                    console.log("Upload sucessful");
+                    resultOutput("successfully added", "success");
                 } else {
                     throw new Error("Update failed");
                 }
             }).catch((e) => {
                 console.error(e);
+                resultOutput("Error adding", "error");
             });
+        } else {
+
+            const id = props.data._id;
+
+            const data: experienceData = {
+                company: company,
+                position: position,
+                startDate: new Date(startDate).toISOString(),
+                description: description,
+                img: props.data.img,
+            };
+
+            if (selectedFile) {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                api.updateFile(formData, id, props.data.img).then((e) => {
+                    if (e.status === 202) {
+                        data.img = e.data;
+                        return api.updateExperience(data, id);
+                    } else {
+                        throw new Error("Failed updating file");
+                    }
+                }).then((e) => {
+                    if (e.status === 202) {
+                        resultOutput("Update successfully", "success");
+                    } else {
+                        throw new Error("Update failed");
+                    }
+                }).catch((e) => {
+                    console.error(e);
+                    resultOutput("Update error", "error");
+                });
+            } else {
+                api.updateExperience(data, id).then((e) => {
+                    if (e.status === 202) {
+                        resultOutput("Update successfully", "success");
+                    } else {
+                        throw new Error("Update failed");
+                    }
+                }).catch((e) => {
+                    console.error(e);
+                    resultOutput("Update error", "error");
+                });
+            }
         }
     }
 
-    // const handleDelete = () => {
-
-    // }
+    const handleDelete = () => {
+        setLoading(true);
+        api.deleteFile(props.data._id, props.data.img).then(
+            () => {
+                return api.deleteExperience(props.data._id)
+            }
+        ).then((e) => {
+            if (e.status === 202) {
+                resultOutput("successfully deleted", "success");
+            } else {
+                resultOutput("error in deleting", "error");
+            }
+        });
+    }
 
     return (
         <>
@@ -152,7 +215,7 @@ export default function ExperienceForm(props: componentProps) {
                                     </FormControl>}
                                 <Flex justifyContent={"space-between"}>
                                     <Input type="submit" value={props.type === "new" ? "Add New" : "Update"} width={"24"} bg={"blue.300"} _hover={{ bg: "blue.400" }} textColor={"black"} />
-                                    {props.type === "new" ? "" : <Input type="button" value="Delete" width={"24"} bg={"red.300"} _hover={{ bg: "red.400" }} textColor={"black"} />}
+                                    {props.type === "new" ? "" : <Input type="button" value="Delete" width={"24"} bg={"red.300"} _hover={{ bg: "red.400" }} textColor={"black"} onClick={handleDelete} />}
                                 </Flex>
                             </Stack>
                         </form>

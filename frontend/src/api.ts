@@ -2,6 +2,7 @@ import axios from "axios";
 
 class API {
     client: any;
+    fileClient: any;
     apiUrl: string;
 
     constructor() {
@@ -12,6 +13,15 @@ class API {
             baseURL: this.apiUrl,
             headers: {
                 "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        });
+
+        // Create axios client for uploading files
+        this.fileClient = axios.create({
+            baseURL: this.apiUrl,
+            headers: {
+                "Content-Type": "multipart/form-data",
                 Accept: "application/json",
             },
         });
@@ -53,22 +63,22 @@ class API {
     }
 
     deleteExperience = async (id: string) => {
-        let response = await this.client.put(`/api/experiences/delete?id=${id}`);
+        let response = await this.client.delete(`/api/experiences/delete?id=${id}`);
         return response;
     }
 
     uploadFile = async (data: FormData, id: string) => {
-        let response = await this.client.post(`/api/files/upload?id=${id}`, data);
+        let response = await this.fileClient.post(`/api/files/upload?id=${id}`, data);
         return response;
     }
 
-    updateFile = async (data: FormData, id: string) => {
-        let response = await this.client.put(`/api/files/update?id=${id}`, data);
+    updateFile = async (data: FormData, id: string, curr_file: string) => {
+        let response = await this.fileClient.put(`/api/files/update?id=${id}&curr_file=${curr_file}`, data);
         return response;
     }
 
-    deleteFile =async (id: string) => {
-        let response = await this.client.delete(`/api/files/delete?id=${id}`);
+    deleteFile = async (id: string, curr_file: string) => {
+        let response = await this.client.delete(`/api/files/delete?id=${id}&curr_file=${curr_file}`);
         return response;
     }
 }

@@ -56,7 +56,7 @@ async def update_Experience(
         filter = {"_id": id}
         # Experience body contain "_id" so filter that out
         update = {"$set": experience_body}
-        await experience_collection.update_one(filter=filter, update=update)
+        experience_collection.update_one(filter=filter, update=update)
         return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="success")
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)

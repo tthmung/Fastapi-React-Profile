@@ -8,7 +8,7 @@ from models.objectID import PyObjectId
 class ProjectModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     title: str = Field(...)
-    startDate: datetime = datetime.now()  # This is for ordering
+    orderDate: datetime = datetime.now()  # This is for ordering
     description: str = Field(...)
     img: str = Field(...)
     link: str = Field(...)
@@ -20,7 +20,7 @@ class ProjectModel(BaseModel):
         schema_extra = {
             "example": {
                 "title": "PorjectTitle",
-                "startDate": "2021-08-01T00:00:00",
+                "orderDate": "2021-08-01T00:00:00",
                 "description": "I work as software developer",
                 "img": "123456789.png",
                 "link": "https://localhost",
@@ -31,7 +31,7 @@ class ProjectModel(BaseModel):
 # project model for updating
 class UpdateProjectModel(BaseModel):
     title: str = Field(...)
-    startDate: datetime = datetime.now()  # This is for ordering
+    orderDate: datetime = datetime.now()  # This is for ordering
     description: str = Field(...)
     img: str = Field(...)
     link: str = Field(...)
@@ -43,7 +43,7 @@ class UpdateProjectModel(BaseModel):
         schema_extra = {
             "example": {
                 "title": "title",
-                "startDate": "2021-08-01T00:00:00",
+                "orderDate": "2021-08-01T00:00:00",
                 "description": "I work as software developer",
                 "img": "123.png",
                 "link": "https://localhost",

@@ -38,7 +38,7 @@ async def update_file(file: UploadFile, id: str | None = None, curr_file: str | 
         os.remove(f"{root}/{id}/{curr_file}")
 
         new_filename = generate_new_name(file)
-        file_location = f"{root}{id}/{new_filename}"
+        file_location = f"{root}/{id}/{new_filename}"
 
         with open(file_location, "wb") as f:
             f.write(await file.read())
@@ -48,9 +48,9 @@ async def update_file(file: UploadFile, id: str | None = None, curr_file: str | 
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @router.delete("/delete", response_description="delete a file")
-async def delete_file(id: str | None = None, filename: str | None = None):
+async def delete_file(id: str | None = None, curr_file: str | None = None):
     try:
-        file_location = f"{root}/{id}/{filename}"
+        file_location = f"{root}/{id}/{curr_file}"
         os.remove(file_location)
 
         # if directory is empty remove it

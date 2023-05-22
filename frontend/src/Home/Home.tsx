@@ -102,9 +102,6 @@ export default function Home() {
                     <Box w="48%">
 
                     </Box>
-                    <Box>
-
-                    </Box>
                 </Flex>
 
             </Box>
