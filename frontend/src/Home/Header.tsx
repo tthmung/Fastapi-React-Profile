@@ -1,115 +1,100 @@
-import { ReactNode } from "react";
+import { useState } from "react";
 import {
-    Box,
-    Flex,
-    Avatar,
-    Link,
-    Button,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuDivider,
-    useColorModeValue,
-    Stack,
-    HStack,
-    useColorMode,
-    Center,
+  Box,
+  Flex,
+  Link,
+  Button,
+  useColorModeValue,
+  Stack,
+  useColorMode,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { MoonIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
 
-const Links = [
-    { name: "Experiences", href: "#Experiences" },
-    { name: "Projects", href: "#Projects" }
+const IconButton = motion(Button);
+
+const links = [
+  { name: "Home", href: "#Home", light: "#", dark: "#" },
+  { name: "Experiences", href: "#Experiences", light: "#", dark: "#" },
+  { name: "Work", href: "#Work", light: "#", dark: "#" },
+  { name: "Contact", href: "#Contact", light: "#", dark: "#" },
 ];
-
-const Connects = [
-    { name: "Linkedin", href: "https://www.linkedin.com/in/thawng-hmung" },
-    { name: "Github", href: "https://github.com/tthmung" },
-    { name: "Gmail", href: "mailto: tthmung@mtu.edu" }
-];
-
-const NavLink = ({ children, linkIndex }: { children: ReactNode, linkIndex: string }) => (
-    <Link
-        px={2}
-        py={1}
-        rounded={"md"}
-        _hover={{
-            textDecoration: "none",
-            bg: useColorModeValue("gray.200", "gray.700"),
-        }}
-        href={linkIndex}
-    >
-        {children}
-    </Link>
-);
 
 export default function Header() {
-    const { colorMode, toggleColorMode } = useColorMode();
-    return (
-        <>
-            <Box
-                bg={useColorModeValue("gray.100", "gray.900")} position={"fixed"} w={"full"}>
-                <Flex h={16} alignItems={"center"} justifyContent={"space-between"} w={"80%"} m={"auto"}>
-                    <Flex>
-                        <Link
-                            href="/">
-                            <Avatar
-                                size={"md"}
-                                src={"https://api.dicebear.com/6.x/avataaars/svg?seed=Sasha&accessories=sunglasses&eyebrows=default,defaultNatural,flatNatural,raisedExcited,raisedExcitedNatural&eyes=default,happy&facialHair[]&facialHairProbability=0&hairColor=2c1b18,4a312c&mouth=smile&skinColor=f8d25c,fd9841&top=dreads02,shortFlat,hat"}
-                            />
-                        </Link>
-                    </Flex>
-                    <Flex alignItems={"center"}>
-                        <Stack direction={"row"} spacing={{ base: '1', md: '4' }}>
-                            <HStack as={'nav'}
-                                spacing={1}
-                                m={0}
-                                display={{ base: 'flex' }}>
-                                {Links.map((link) => (
-                                    <NavLink key={link.name} linkIndex={link.href}>
-                                        {link.name}
-                                    </NavLink>
-                                ))}
-                            </HStack>
-                            <Menu>
-                                <MenuButton
-                                    as={Button}
-                                    variant={'solid'}
-                                    colorScheme={'teal'}
-                                    m={0}
-                                >
-                                    Connect
-                                </MenuButton>
-                                <MenuList alignItems={"center"}>
-                                    <br />
-                                    <Center>
-                                        <Avatar
-                                            size={"2xl"}
-                                            src={"https://api.dicebear.com/6.x/avataaars/svg?seed=Sasha&accessories=sunglasses&eyebrows=default,defaultNatural,flatNatural,raisedExcited,raisedExcitedNatural&eyes=default,happy&facialHair[]&facialHairProbability=0&hairColor=2c1b18,4a312c&mouth=smile&skinColor=f8d25c,fd9841&top=dreads02,shortFlat,hat"}
-                                        />
-                                    </Center>
-                                    <MenuDivider />
-                                    {Connects.map((link) => (
-                                        <MenuItem>
-                                            <Link
-                                            href={link.href}
-                                            isExternal
-                                            _hover={{ textDecoration: "none" }}>
-                                            {link.name}
-                                            </Link>
-                                        </MenuItem>
-                                    ))}
-                                </MenuList>
-                            </Menu>
-                            <Button onClick={toggleColorMode}>
-                                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                            </Button>
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [menu, setMenu] = useState(false); // Set initial value of the menu state
+  const [rotateAngle, setRotateAngle] = useState(0);
 
-                        </Stack>
-                    </Flex>
-                </Flex>
-            </Box>
-        </>
-    );
+  const handleIconClick = () => {
+    setRotateAngle((prevAngle) => prevAngle + 180);
+    setMenu(!menu);
+  };
+
+
+  const buttonVariants = {
+    tap: {
+      x: "50%",
+    },
+    untap: {
+      x: 0,
+    },
+  };
+
+  const renderMenu = (
+    <Flex
+      top={0}
+      left={0}
+      right={0}
+      bottom={0}
+      height={"100vh"}
+      position={"fixed"}
+      flexDirection={"column"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      width={"100vw"}
+      background={useColorModeValue("rgba(255, 255, 255, .7)", "rgba(26, 32, 44, .8)")}
+      backdropFilter={"blur(10px)"}
+      overflow={"hidden"}
+      transition={".2s"}
+    >
+      {links.map((link) => (
+        <Link key={link.name} href={link.href} _dark={{ bg: "" }} _light={{ bg: "" }}>
+          {link.name}
+        </Link>
+      ))}
+    </Flex>
+  );
+
+  return (
+    <>
+      <Box bg={useColorModeValue("gray.100", "gray.900")} w={"full"}>
+        <Flex h={16} alignItems={"center"} justifyContent={"space-between"} w={"80%"} m={"auto"}>
+          <Link href="/" fontSize={"lg"}>
+            Thawng Hmung
+          </Link>
+          <Flex alignItems={"center"} top={0} zIndex={10}>
+            <Stack direction={"row"} spacing={{ base: "1", md: "4" }} position={"fixed"}>
+              <IconButton
+                onClick={toggleColorMode}
+                as={motion.button}
+                variants={buttonVariants}
+                whileTap="tap"
+                transition={{ duration: 0.2 }}
+              >
+                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+              </IconButton>
+              <Button zIndex={"sticky"} onClick={() => handleIconClick()}>
+                <TriangleDownIcon
+                  transform={`rotate(${rotateAngle}deg)`}
+                  transition={".2s"}
+                  cursor="pointer"
+                />
+              </Button>
+            </Stack>
+          </Flex>
+        </Flex>
+      </Box>
+      {!menu ? "" : renderMenu}
+    </>
+  );
 }

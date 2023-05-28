@@ -14,6 +14,7 @@ import {
 
 import Header from './Header';
 import Card from './Card';
+import { experienceInterface, projectInterface } from '../Components/Interface';
 
 
 export default function
@@ -37,16 +38,16 @@ export default function
     });
 
     // Get apis
-    useEffect(() => {
-        const api = new API();
+    // useEffect(() => {
+    //     const api = new API();
 
-        const fetchData = async () => {
-            setBack("ASd");
-        }
+    //     const fetchData = async () => {
+    //         setBack("ASd");
+    //     }
 
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
 
     return (
         <>
@@ -106,7 +107,9 @@ export default function
                         </Box>
                     </Box>
                 </Flex> */}
+            <Box height={"100vh"}>
 
+            </Box>
             </Box>
         </>
     );
