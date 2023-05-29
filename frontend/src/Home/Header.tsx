@@ -12,12 +12,13 @@ import { MoonIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 
 const IconButton = motion(Button);
+const AvatarMotion = motion(TriangleDownIcon);
 
 const links = [
-  { name: "Home", href: "#Home", light: "#", dark: "#" },
-  { name: "Experiences", href: "#Experiences", light: "#", dark: "#" },
-  { name: "Work", href: "#Work", light: "#", dark: "#" },
-  { name: "Contact", href: "#Contact", light: "#", dark: "#" },
+  { name: "Home", href: "#Home", bg: "#FA8072", emoji: "🎮", textColor: "#5e302b" },
+  { name: "Experience", href: "#Experiences", bg: "#f6c6ea", emoji: "🥑", textColor: "#5c4a58" },
+  { name: "Contact", href: "#Contact", bg: "#ffe66e", emoji: "⚽", textColor: "#605629" },
+  { name: "Resume", href: "#Resume", bg: "#9fe6a0", emoji: "🔮", textColor: "#3c563c" },
 ];
 
 export default function Header() {
@@ -41,28 +42,56 @@ export default function Header() {
   };
 
   const renderMenu = (
-    <Flex
-      top={0}
-      left={0}
-      right={0}
-      bottom={0}
-      height={"100vh"}
-      position={"fixed"}
-      flexDirection={"column"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      width={"100vw"}
-      background={useColorModeValue("rgba(255, 255, 255, .7)", "rgba(26, 32, 44, .8)")}
-      backdropFilter={"blur(10px)"}
-      overflow={"hidden"}
-      transition={".2s"}
-    >
-      {links.map((link) => (
-        <Link key={link.name} href={link.href} _dark={{ bg: "" }} _light={{ bg: "" }}>
-          {link.name}
-        </Link>
-      ))}
-    </Flex>
+    <>
+      <style>
+        {`
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}
+      </style>
+      <Flex
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        height={"100vh"}
+        position={"fixed"}
+        flexDirection={"column"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        width={"100vw"}
+        background={useColorModeValue("rgba(255, 255, 255, .7)", "rgba(26, 32, 44, .8)")}
+        backdropFilter={"blur(10px)"}
+        overflow={"hidden"}
+        gap={"2"}
+        animation={"fade-in .6s cubic-bezier(.23,1,.32,1) both"}
+        opacity={0}
+      >
+        {links.map((link) => (
+          <Link
+            key={link.name}
+            href={link.href}
+            bg={link.bg}
+            py={"2"}
+            px={"8"}
+            borderRadius={"3xl"}
+            textColor={link.textColor}
+            fontSize={{ base: "3xl", md: "6xl" }}
+            transition={".4s cubic-bezier(.68, -.6, .32, 1.6)"}
+            _hover={{ textDecoration: "none", py: "0", px: "24", textColor: "black" }}
+            fontWeight={"semibold"}
+          >
+            <span>
+              {link.emoji}
+            </span>
+            {link.name}
+          </Link>
+        ))}
+
+      </Flex>
+    </>
   );
 
   return (
@@ -70,9 +99,9 @@ export default function Header() {
       <Box bg={useColorModeValue("gray.100", "gray.900")} w={"full"}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"} w={"80%"} m={"auto"}>
           <Link href="/" fontSize={"lg"}>
-            Thawng Hmung
+            Thawng Hmung <span></span>
           </Link>
-          <Flex alignItems={"center"} top={0} zIndex={10}>
+          <Flex alignItems={"center"} zIndex={10} justifyContent={"flex-end"}>
             <Stack direction={"row"} spacing={{ base: "1", md: "4" }} position={"fixed"}>
               <IconButton
                 onClick={toggleColorMode}
@@ -83,10 +112,12 @@ export default function Header() {
               >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </IconButton>
-              <Button zIndex={"sticky"} onClick={() => handleIconClick()}>
-                <TriangleDownIcon
-                  transform={`rotate(${rotateAngle}deg)`}
-                  transition={".2s"}
+              <Button
+                onClick={() => handleIconClick()}
+              >
+                <AvatarMotion
+                  animate={{ rotate: rotateAngle }}
+                  transition={{ type: "spring" }}
                   cursor="pointer"
                 />
               </Button>
@@ -94,6 +125,7 @@ export default function Header() {
           </Flex>
         </Flex>
       </Box>
+
       {!menu ? "" : renderMenu}
     </>
   );
