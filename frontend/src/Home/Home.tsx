@@ -7,22 +7,23 @@ import {
     Box,
     Flex,
     Center,
-    Image,
     Text,
-    useColorModeValue
+    useColorModeValue,
+    Image,
+    Button
 } from '@chakra-ui/react';
 
 import Header from './Header';
 import Card from './Card';
 import { experienceInterface, projectInterface } from '../Components/Interface';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
-export default function
-    Home() {
+export default function Home() {
 
     const [back, setBack] = useState({});
     const [mousePosition, setMousePosition] = useState({ x: Number, y: Number });
-
+    const [isFrontVisible, setIsFrontVisible] = useState<boolean>(true);
 
     // Get the mouse position
     useEffect(() => {
@@ -37,6 +38,7 @@ export default function
         }
     });
 
+
     // Get apis
     // useEffect(() => {
     //     const api = new API();
@@ -49,6 +51,67 @@ export default function
     //     fetchData();
     // }, []);
 
+    const renderFront = (
+        <motion.div
+            key="front"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+        >
+            <Box className='front'>
+                <Text fontSize={"3xl"} fontFamily={"dejavu-serif"}>
+                    Hello there, I'm Thawng
+                </Text>
+                <Text
+                    fontSize={{base: "3xl", md: "6xl"}}
+                    color={useColorModeValue("#e74c3c", "#00FFFF")}
+                    fontFamily={"dejavu-serif"}
+                    marginTop={"6"}
+                >
+                    A Software Developer
+                </Text>
+                <Text
+                    fontSize={"2xl"}
+                    fontFamily={"dejavu-serif"}
+                    marginTop={"2"}
+                >
+                    Currently @ Michigan Tech
+                </Text>
+                <Text
+                    fontSize={"xl"}
+                    color={"#A6A6A6"}
+                    marginTop={"4"}
+                    w={{base: "95%", md: "40%"}}
+                >
+                    I am passionate about making lives easier through technology
+                </Text>
+            </Box>
+        </motion.div>
+    );
+
+    const renderBack = (
+        <motion.div
+            key="back"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+        >
+            <Box className='back'>
+                <Text fontSize={"2xl"} fontFamily={"dejavu-serif"}>
+                    About me
+                </Text>
+                <Text fontSize={{base: "lg", md: "xl"}} fontFamily="copse">
+                    <br />
+                    I'm a software developer currently pursuing a degree in computer science at Michigan Technological University. I'm passionate about creating high-quality, ethical code that makes a positive impact on people's lives.
+                    <br /><br />
+                    Over the years, I've gained valuable experience through a variety of projects and internships, working with teams to develop innovative solutions and hone my skills as a developer.
+                    <br /><br />
+                    In my free time, I love playing outdoor sports like soccer and tennis, as well as exploring the world of video games (I'm a big fan of League of Legends!). But I also value spending time with friends and having meaningful conversations about anything and everything.
+                </Text>
+            </Box>
+        </motion.div>
+    );
+
     return (
         <>
             <Header />
@@ -57,59 +120,66 @@ export default function
                 <Flex
                     flexDirection={{ base: "column", md: "row" }}
                     justifyContent={"space-between"}
-                    alignItems={"center"}
                     paddingTop={16}
-                    h={"70vh"}
-                    w={"80%"}
+                    h={{base: "100vh", md: "70vh"}}
+                    w={{base: "90%", md: "80%"}}
                     m={"auto"}
+                    gap={"2"}
                 >
-                    <Center>
-                        <Box textAlign={"left"}>
-                            <Text fontSize={"xl"} fontFamily={"dejavu-serif"}>Hello, welcome to my website!</Text>
-                            <Text fontSize={"5xl"} fontFamily={"dejavu-serif"}>I'm Thawng Hmung</Text>
-                            <Text
-                                fontSize={"6xl"}
-                                color={useColorModeValue("#e74c3c", "#00FFFF")}
-                                fontFamily={"dejavu-serif"}
-                            >A Software Developer</Text>
-                            <Text fontSize={"2xl"} fontFamily={"dejavu-serif"}>Currently @ Michigan Tech</Text>
-                        </Box>
-                    </Center>
+                    <Box
+                        h={"full"}
+                        w={{base: "full", md: "65%"}}
+                        borderRadius={"3xl"}
+                        bg={useColorModeValue("#edf2f7", "#171923")}
+                    >
+                        <Flex
+                            paddingY={{base: "10", md: "20"}}
+                            paddingX={{base: "5", md: "10"}}
+                            flexDirection={"column"}
+                            justifyContent={"space-between"}
+                            h="full"
+                        >
+                            <AnimatePresence mode="wait">
+                                {isFrontVisible ? renderFront : renderBack}
+                            </AnimatePresence>
+                            <Box>
+                                <Button
+                                    marginRight={"2"}
+                                    _light={{
+                                        bg: "black",
+                                        textColor: "white",
+                                        _hover: { bg: "#393939" },
+                                        _active: { bg: "#5f5f5f" }
+                                    }}
+                                >
+                                    View my work
+                                </Button>
+                                <Button
+                                    marginLeft={"2"}
+                                    _light={{
+                                        bg: "black",
+                                        textColor: "white",
+                                        _hover: { bg: "#393939" },
+                                        _active: { bg: "#5f5f5f" }
+                                    }}
+                                    onClick={() => setIsFrontVisible(!isFrontVisible)}
+                                >
+                                    {isFrontVisible ? "About me" : "Home"}
+                                </Button>
+                            </Box>
+                        </Flex>
+                    </Box>
+                    <Image
+                        src={require('../static/profile.JPG')}
+                        alt="profile"
+                        borderRadius={"3xl"}
+
+                    />
                 </Flex>
 
-                {/* About ME */}
+                <Box height={"100vh"}>
 
-                {/* <Flex
-                    w={"80%"}
-                    m={"auto"}
-                    justifyContent={"space-between"}
-                >
-                    <Box w="48%" position="relative">
-                        <Box
-                            p="10"
-                            backdropFilter="blur(10px)"
-                            backgroundColor="rgba(255, 255, 255, 0.5)"
-                            border={1}
-                            borderColor="transparent"
-                            borderRadius="2xl"
-                            position="relative"
-                            zIndex="1"
-                        >
-                            <Text fontSize="3xl" fontFamily="copse">Meet Thawng</Text>
-                            <Text fontSize="2xl" fontFamily="copse">
-                                <br />
-                                I'm a software developer currently pursuing a degree in computer science at Michigan Technological University. I'm passionate about creating high-quality, ethical code that makes a positive impact on people's lives.
-                                <br /><br />
-                                Over the years, I've gained valuable experience through a variety of projects and internships, working with teams to develop innovative solutions and hone my skills as a developer.
-                                <br /><br />
-                                In my free time, I love playing outdoor sports like soccer and tennis, as well as exploring the world of video games (I'm a big fan of League of Legends!). But I also value spending time with friends and having meaningful conversations about anything and everything.
-                            </Text>
-                        </Box>
-                    </Box>
-                </Flex> */}
-            <Box height={"100vh"}>
-
-            </Box>
+                </Box>
             </Box>
         </>
     );

@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
+import './Home.css';
 
 const IconButton = motion(Button);
 const AvatarMotion = motion(TriangleDownIcon);
@@ -43,14 +44,6 @@ export default function Header() {
 
   const renderMenu = (
     <>
-      <style>
-        {`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}
-      </style>
       <Flex
         top={0}
         left={0}
@@ -65,9 +58,10 @@ export default function Header() {
         background={useColorModeValue("rgba(255, 255, 255, .7)", "rgba(26, 32, 44, .8)")}
         backdropFilter={"blur(10px)"}
         overflow={"hidden"}
-        gap={"2"}
+        gap={"4"}
         animation={"fade-in .6s cubic-bezier(.23,1,.32,1) both"}
         opacity={0}
+        zIndex={"2"}
       >
         {links.map((link) => (
           <Link
