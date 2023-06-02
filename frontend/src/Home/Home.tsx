@@ -10,11 +10,14 @@ import {
     Text,
     useColorModeValue,
     Image,
-    Button
+    Button,
+    Grid,
+    GridItem
 } from '@chakra-ui/react';
 
 import Header from './Header';
-import Card from './Card';
+import ExperienceCard from '../Components/Card';
+
 import { experienceInterface, projectInterface } from '../Components/Interface';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -24,6 +27,16 @@ export default function Home() {
     const [back, setBack] = useState({});
     const [mousePosition, setMousePosition] = useState({ x: Number, y: Number });
     const [isFrontVisible, setIsFrontVisible] = useState<boolean>(true);
+
+    const exampleData: experienceInterface = {
+        _id: "",
+        company: "SciQuel",
+        position: "Intern",
+        startDate: "10",
+        endDate: "12",
+        description: "asdsa",
+        img: "asdsa"
+    }
 
     // Get the mouse position
     useEffect(() => {
@@ -63,7 +76,7 @@ export default function Home() {
                     Hello there, I'm Thawng
                 </Text>
                 <Text
-                    fontSize={{base: "3xl", md: "6xl"}}
+                    fontSize={{ base: "3xl", md: "6xl" }}
                     color={useColorModeValue("#e74c3c", "#00FFFF")}
                     fontFamily={"dejavu-serif"}
                     marginTop={"6"}
@@ -81,7 +94,7 @@ export default function Home() {
                     fontSize={"xl"}
                     color={"#A6A6A6"}
                     marginTop={"4"}
-                    w={{base: "95%", md: "40%"}}
+                    w={{ base: "95%", md: "40%" }}
                 >
                     I am passionate about making lives easier through technology
                 </Text>
@@ -100,7 +113,7 @@ export default function Home() {
                 <Text fontSize={"2xl"} fontFamily={"dejavu-serif"}>
                     About me
                 </Text>
-                <Text fontSize={{base: "lg", md: "xl"}} fontFamily="copse">
+                <Text fontSize={{ base: "lg", md: "xl" }} fontFamily="copse">
                     <br />
                     I'm a software developer currently pursuing a degree in computer science at Michigan Technological University. I'm passionate about creating high-quality, ethical code that makes a positive impact on people's lives.
                     <br /><br />
@@ -121,20 +134,20 @@ export default function Home() {
                     flexDirection={{ base: "column", md: "row" }}
                     justifyContent={"space-between"}
                     paddingTop={16}
-                    h={{base: "100vh", md: "70vh"}}
-                    w={{base: "90%", md: "80%"}}
+                    h={{ base: "100vh", md: "70vh" }}
+                    w={{ base: "90%", md: "80%" }}
                     m={"auto"}
                     gap={"2"}
                 >
                     <Box
                         h={"full"}
-                        w={{base: "full", md: "65%"}}
+                        w={{ base: "full", md: "65%" }}
                         borderRadius={"3xl"}
                         bg={useColorModeValue("#edf2f7", "#171923")}
                     >
                         <Flex
-                            paddingY={{base: "10", md: "20"}}
-                            paddingX={{base: "5", md: "10"}}
+                            paddingY={{ base: "10", md: "20" }}
+                            paddingX={{ base: "5", md: "10" }}
                             flexDirection={"column"}
                             justifyContent={"space-between"}
                             h="full"
@@ -176,10 +189,35 @@ export default function Home() {
 
                     />
                 </Flex>
+                {/* <Box
+                    w={{ base: "90%", md: "80%" }}
+                    margin={"auto"}
+                >
+                    <ExperienceCard data={exampleData} />
+                </Box> */}
+                <Grid
+                    w={{ base: "90%", md: "80%" }}
+                    margin={"auto"}
+                    templateRows='repeat(6, 1fr)'
+                    gridGap={"4"}
+                >
+                    <GridItem colSpan={4}>
+                        <ExperienceCard data={exampleData} />
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                        <ExperienceCard data={exampleData} />
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                        <ExperienceCard data={exampleData} />
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                        <ExperienceCard data={exampleData} />
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                        <ExperienceCard data={exampleData} />
+                    </GridItem>
 
-                <Box height={"100vh"}>
-
-                </Box>
+                </Grid>
             </Box>
         </>
     );
