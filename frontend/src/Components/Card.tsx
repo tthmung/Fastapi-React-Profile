@@ -1,28 +1,96 @@
-import React, { useState } from 'react';
-import { Card, CardBody, Image, Stack, Heading, Text, } from "@chakra-ui/react";
+import React, { useState, useRef, useEffect } from 'react';
+import {
+    Card,
+    CardBody,
+    Image,
+    Stack,
+    Heading,
+    Text,
+    Flex,
+    Box,
+    useColorModeValue
+} from "@chakra-ui/react";
 
-import { componentProps } from './Interface';
+import { experienceInterface, projectInterface } from './Interface';
 
-export default function ExperienceCard(props: componentProps) {
+interface componentProps {
+    data: experienceInterface | projectInterface;
+    bg: string;
+    type: string;
+}
 
-    const [show, setShow] = useState();
+export default function
+    ExperienceCard(props: componentProps) {
 
+        const [isDivSmaller, setIsDivSmaller] = useState<boolean>(false);
+        const divRef = useRef<HTMLDivElement>(null);
+
+        // Check if the card width is smaller than screen width
+        useEffect(() => {
+          const handleResize = () => {
+            const screenWidth: number = window.innerWidth;
+            const divWidth: number = divRef.current?.offsetWidth || 0;
+            const isSmaller: boolean = divWidth < screenWidth / 2;
+            setIsDivSmaller(isSmaller);
+          };
+
+          handleResize();
+
+          window.addEventListener('resize', handleResize);
+
+          return () => {
+            window.removeEventListener('resize', handleResize);
+          };
+        }, []);
 
     return (
-        <Card maxW={"full"} minW={"50%"} borderRadius={"3xl"}>
-            <CardBody>
-                <Image
-                    src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                    alt='Green double couch with wooden legs'
-                    borderRadius='3xl'
-                />
-                <Stack mt='6' spacing='3'>
-                    <Heading size='md'>Living room Sofa</Heading>
-                    <Text>
-                        This sofa is perfect for modern tropical spaces, baroque inspired
-                        spaces, earthy toned spaces and for people who love a chic design with a
-                        sprinkle of vintage design.
+        <Card
+            ref={divRef}
+            maxW={"full"}
+            minW={"50%"}
+            borderRadius={"3xl"}
+            bg={props.bg}
+            transition={"transform 0.3s"}
+            _hover={{ transform: "scale(1.02)", cursor: "pointer" }}
+            onClick={() => alert("Clicked")}
+        >
+            <CardBody
+                padding={"0"}
+            >
+                <Box
+                    paddingTop={{base: "4", '2xl': "36"}}
+                    paddingX={{base: "4", '2xl': "36"}}
+                >
+                    <Image
+                        src={require('../static/SciQuel-Home.png')}
+                        alt='Green double couch with wooden legs'
+                        borderTopRadius={'3xl'}
+                    />
+                </Box>
+                <Stack
+                    spacing='3'
+                    borderTopRadius={"xl"}
+                    borderBottomRadius={"3xl"}
+                    bg={useColorModeValue("white", "#1F2937")}
+                    padding={"5"}
+                >
+                    <Heading size='md'>SciQuel</Heading>
+                    <Text fontSize={{base: "sm", lg: "2xl"}}>
+                        Web Developer Intern
                     </Text>
+                    <Flex
+                    justifyContent={"space-between"}
+                    alignItems={{base: isDivSmaller ? "" : "center", md: "center"}}
+                    flexWrap={"nowrap"}
+                    flexDirection={{base: isDivSmaller ? "column" : "row", md: "row"}}
+                    >
+                        <Text fontSize={{base: "sm", lg: "2xl"}}>
+                            {props.type}
+                        </Text>
+                        <Text fontSize={{base: "sm", lg: "2xl"}}>
+                            Feb 2023 - May 2023
+                        </Text>
+                    </Flex>
                 </Stack>
             </CardBody>
         </Card>

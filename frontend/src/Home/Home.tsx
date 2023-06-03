@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import API from '../api';
 import "@fontsource/dejavu-serif";
 import "@fontsource/copse"
-import api_helper from '../api_helper';
 import {
     Box,
     Flex,
-    Center,
     Text,
     useColorModeValue,
     Image,
     Button,
     Grid,
-    GridItem
+    GridItem,
+    useColorMode,
 } from '@chakra-ui/react';
 
 import Header from './Header';
@@ -21,20 +20,25 @@ import ExperienceCard from '../Components/Card';
 import { experienceInterface, projectInterface } from '../Components/Interface';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const lightBg = ["#EDFFFC", "#f9ffed", "#cff9ce", "#FFF4E3", "#F9FAFF", "#FFFCE6"];
+const darkBg = ["#1A202C", "#2D3748", "#1C2231", "#2B3442", "#202C37", "#283845"];
+const dataList = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'];
 
 export default function Home() {
 
     const [back, setBack] = useState({});
     const [mousePosition, setMousePosition] = useState({ x: Number, y: Number });
     const [isFrontVisible, setIsFrontVisible] = useState<boolean>(true);
+    const { colorMode } = useColorMode();
+
 
     const exampleData: experienceInterface = {
         _id: "",
         company: "SciQuel",
-        position: "Intern",
-        startDate: "10",
-        endDate: "12",
-        description: "asdsa",
+        position: "Web Developer Intern",
+        startDate: "Feb 2023",
+        endDate: "May 2023",
+        description: "At SciQuel the main focus of work is on the SciQuel website. SciQuel is a non-profit organization that aims to increase scientific literacy by providing scientific articles to non-technical people. At SciQuel we used the MERN stack, and I work as a full-stack developer. We have a stand-up every week and would collaborate with other interns to boost efficiency. This is a remote internship and all the meetings are done through zoom.",
         img: "asdsa"
     }
 
@@ -131,23 +135,23 @@ export default function Home() {
             <Box h="auto">
                 {/* The introductory section*/}
                 <Flex
-                    flexDirection={{ base: "column", md: "row" }}
+                    flexDirection={{ base: "column", '2xl': "row" }}
                     justifyContent={"space-between"}
-                    paddingTop={16}
-                    h={{ base: "100vh", md: "70vh" }}
-                    w={{ base: "90%", md: "80%" }}
+                    paddingTop={10}
+                    h={{ base: "full",'2xl': "70vh" }}
+                    w={{ base: "90%", lg: "80%" }}
                     m={"auto"}
-                    gap={"2"}
+                    gap={"4"}
                 >
                     <Box
                         h={"full"}
-                        w={{ base: "full", md: "65%" }}
+                        w={{ base: "full",'2xl': "65%" }}
                         borderRadius={"3xl"}
                         bg={useColorModeValue("#edf2f7", "#171923")}
                     >
                         <Flex
-                            paddingY={{ base: "10", md: "20" }}
-                            paddingX={{ base: "5", md: "10" }}
+                            paddingY={{ base: "10", lg: "20" }}
+                            paddingX={{ base: "5", lg: "10" }}
                             flexDirection={"column"}
                             justifyContent={"space-between"}
                             h="full"
@@ -155,7 +159,9 @@ export default function Home() {
                             <AnimatePresence mode="wait">
                                 {isFrontVisible ? renderFront : renderBack}
                             </AnimatePresence>
-                            <Box>
+                            <Box
+                                marginTop={{ base: "4", lg: "0" }}
+                            >
                                 <Button
                                     marginRight={"2"}
                                     _light={{
@@ -189,35 +195,30 @@ export default function Home() {
 
                     />
                 </Flex>
-                {/* <Box
-                    w={{ base: "90%", md: "80%" }}
-                    margin={"auto"}
-                >
-                    <ExperienceCard data={exampleData} />
-                </Box> */}
-                <Grid
-                    w={{ base: "90%", md: "80%" }}
-                    margin={"auto"}
-                    templateRows='repeat(6, 1fr)'
-                    gridGap={"4"}
-                >
-                    <GridItem colSpan={4}>
-                        <ExperienceCard data={exampleData} />
-                    </GridItem>
-                    <GridItem colSpan={2}>
-                        <ExperienceCard data={exampleData} />
-                    </GridItem>
-                    <GridItem colSpan={2}>
-                        <ExperienceCard data={exampleData} />
-                    </GridItem>
-                    <GridItem colSpan={2}>
-                        <ExperienceCard data={exampleData} />
-                    </GridItem>
-                    <GridItem colSpan={2}>
-                        <ExperienceCard data={exampleData} />
-                    </GridItem>
+                <Box marginTop={"4"}>
+                    <Grid
+                        w={{ base: "90%", lg: "80%" }}
+                        margin={"auto"}
+                        gridGap={"4"}
+                    >
+                        <GridItem colSpan={4} height={"min"}>
+                            <ExperienceCard data={exampleData} bg={useColorModeValue("#EDFFFC", "#1A202C")} type="Experience" />
+                        </GridItem>
+                        {dataList.map((item, index) => (
+                            <GridItem colSpan={2} height={"min"} key={item}>
+                                <ExperienceCard
+                                    data={exampleData}
+                                    bg={colorMode === "light" ?
+                                        lightBg[(index + 1) % lightBg.length]
+                                        :
+                                        darkBg[(index + 1) % darkBg.length]}
+                                    type="Experience"
+                                />
+                            </GridItem>
 
-                </Grid>
+                        ))}
+                    </Grid>
+                </Box>
             </Box>
         </>
     );
