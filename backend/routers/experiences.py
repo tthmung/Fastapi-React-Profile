@@ -21,7 +21,7 @@ router = APIRouter(
 )
 async def read_experiences():
     try:
-        experience = experience_collection.find()
+        experience = experience_collection.find().sort("startDate", -1)
         list_exp = list(experience)
         json_data = dumps(list_exp)
         return JSONResponse(status_code=status.HTTP_200_OK, content=json_data)

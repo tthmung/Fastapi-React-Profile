@@ -7,7 +7,6 @@ import {
     Heading,
     Text,
     Flex,
-    Box,
     useColorModeValue,
 } from "@chakra-ui/react";
 
@@ -67,7 +66,7 @@ export default function ExperienceCard(props: componentProps) {
                     paddingX={{ base: "4", "2xl": "24" }}
                     justifyContent={"center"}
                     alignContent={"baseline"}
-                    height={"sm"}
+                    height={isDivSmaller ? "sm" : "auto"}
                 >
                     <Image
                         src={require(`../uploads/${props.data._id}/${props.data.img}`)}

@@ -9,7 +9,8 @@ import {
     Input,
     Textarea,
     Stack,
-    useToast
+    useToast,
+    Link
 } from '@chakra-ui/react';
 import API from "../api"
 import api_helper from "../api_helper";
@@ -67,7 +68,78 @@ export default function ProjectForm(props: componentProps) {
                 title: project,
                 orderDate: new Date(orderDate).toISOString(),
                 description: description,
+                link: link,
                 img: "",
+            };
+
+            let id = "";
+
+            api.createProject(data).then((e) => {
+                if (e.status === 201) {
+                    id = e.data;
+                    return api.uploadFile(formData, id);
+                } else {
+                    throw new Error("Created failed");
+                }
+            }).then((e) => {
+                if (e.status === 201) {
+                    data.img = e.data;
+                    return api.updateProject(data, id);
+                } else {
+                    throw new Error("Img creation failed");
+                }
+            }).then((e) => {
+                if (e.status === 202) {
+                    resultOutput("successfully added", "success");
+                } else {
+                    throw new Error("Update failed");
+                }
+            }).catch((e) => {
+                console.error(e);
+                resultOutput("Error adding", "error");
+            });;
+        } else {
+            const id = props.data._id;
+
+            const data: projectData = {
+                title: project,
+                orderDate: new Date(orderDate).toISOString(),
+                description: description,
+                link: link,
+                img: props.data.img
+            };
+
+            if (selectedFile) {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                api.updateFile(formData, id, props.data.img).then((e) => {
+                    if (e.status === 202) {
+                        data.img = e.data;
+                        return api.updateProject(data, id);
+                    } else {
+                        throw new Error("Failed updating file");
+                    }
+                }).then((e) => {
+                    if (e.status === 202) {
+                        resultOutput("Update successfully", "success");
+                    } else {
+                        throw new Error("Update failed");
+                    }
+                }).catch((e) => {
+                    console.error(e);
+                    resultOutput("Update error", "error");
+                });
+            } else {
+                api.updateProject(data, id).then((e) => {
+                    if (e.status === 202) {
+                        resultOutput("Update successfully", "success");
+                    } else {
+                        throw new Error("Update failed");
+                    }
+                }).catch((e) => {
+                    console.error(e);
+                    resultOutput("Update error", "error");
+                });
             }
         }
     }
@@ -125,6 +197,15 @@ export default function ProjectForm(props: componentProps) {
                                     </FormControl>
                                     :
                                     <FormControl>
+                                         <Link
+                                            href={require(`../uploads/${props.data._id}/${props.data.img}`)}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            textColor={"blue.200"}
+                                            textDecor={"underline"}
+                                        >
+                                            Current File
+                                        </Link>
                                         <FormLabel>Image</FormLabel>
                                         <Input type="file" accept="image/*" width={"min-content"} border={"none"}
                                             onChange={(e) => setSelectedFile(e.target.files ? e.target.files[0] : null)}

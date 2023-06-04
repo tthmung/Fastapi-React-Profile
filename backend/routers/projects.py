@@ -16,7 +16,7 @@ router = APIRouter(
 @router.get("/", response_description="List of project", response_model=List[ProjectModel])
 async def read_projects():
     try:
-        project = project_collection.find()
+        project = project_collection.find().sort("orderDate", -1)
         list_proj = list(project)
         json_data = dumps(list_proj)
         return JSONResponse(status_code=status.HTTP_200_OK, content=json_data)
