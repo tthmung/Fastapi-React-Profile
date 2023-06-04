@@ -35,9 +35,9 @@ export interface experienceData {
 }
 
 export interface projectData {
-    company: string;
-    position: string;
-    orderDate: string;
-    description: string;
-    img: string;
+    title: string,
+    orderDate: string,
+    description: string,
+    img: string,
+    link?: string
 }

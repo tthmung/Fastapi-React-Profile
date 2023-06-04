@@ -9,7 +9,8 @@ import {
     Input,
     Textarea,
     Stack,
-    useToast
+    useToast,
+    Link
 } from '@chakra-ui/react';
 import API from "../api"
 import api_helper from "../api_helper";
@@ -207,6 +208,15 @@ export default function ExperienceForm(props: componentProps) {
                                     </FormControl>
                                     :
                                     <FormControl>
+                                        <Link
+                                            href={require(`../uploads/${props.data._id}/${props.data.img}`)}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            textColor={"blue.200"}
+                                            textDecor={"underline"}
+                                        >
+                                            Current File
+                                        </Link>
                                         <FormLabel>Image</FormLabel>
                                         <Input type="file" accept="image/*" width={"min-content"} border={"none"}
                                             onChange={(e) => setSelectedFile(e.target.files ? e.target.files[0] : null)}

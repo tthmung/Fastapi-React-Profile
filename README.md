@@ -6,7 +6,7 @@ A Profile website for personal used. This will replace my old web which was made
 
 ## Acknowledgements
 
- - [dicebear](https://www.dicebear.com/)
+ - [freepick](https://www.freepik.com/)
 
 ## Note
 Create a symbolic from uploads to frontend/src/uploads

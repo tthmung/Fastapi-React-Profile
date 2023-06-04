@@ -13,12 +13,12 @@ import {
     GridItem,
     useColorMode,
 } from '@chakra-ui/react';
-
-import Header from './Header';
-import ExperienceCard from '../Components/Card';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { experienceInterface, projectInterface } from '../Components/Interface';
-import { motion, AnimatePresence } from 'framer-motion';
+import Header from './Header';
+import ExperienceCard from '../Components/Card';
+import Loading from '../Components/Loading';
 
 const lightBg = ["#EDFFFC", "#f9ffed", "#cff9ce", "#FFF4E3", "#F9FAFF", "#FFFCE6"];
 const darkBg = ["#1A202C", "#2D3748", "#1C2231", "#2B3442", "#202C37", "#283845"];
@@ -30,17 +30,11 @@ export default function Home() {
     const [mousePosition, setMousePosition] = useState({ x: Number, y: Number });
     const [isFrontVisible, setIsFrontVisible] = useState<boolean>(true);
     const { colorMode } = useColorMode();
+    const [renderLoading, setRenderLoading] = useState<boolean>(true);
 
+    const [experiences, setExperiences] = useState<experienceInterface[]>();
 
-    const exampleData: experienceInterface = {
-        _id: "",
-        company: "SciQuel",
-        position: "Web Developer Intern",
-        startDate: "Feb 2023",
-        endDate: "May 2023",
-        description: "At SciQuel the main focus of work is on the SciQuel website. SciQuel is a non-profit organization that aims to increase scientific literacy by providing scientific articles to non-technical people. At SciQuel we used the MERN stack, and I work as a full-stack developer. We have a stand-up every week and would collaborate with other interns to boost efficiency. This is a remote internship and all the meetings are done through zoom.",
-        img: "asdsa"
-    }
+    const [projects, setProjects] = useState<projectInterface[]>();
 
     // Get the mouse position
     useEffect(() => {
@@ -57,16 +51,31 @@ export default function Home() {
 
 
     // Get apis
-    // useEffect(() => {
-    //     const api = new API();
+    useEffect(() => {
+        const api = new API();
 
-    //     const fetchData = async () => {
-    //         setBack("ASd");
-    //     }
+        const fetchData = async () => {
+            api.getExperience().then((e) => {
+                if (e.status === 200) {
+                    setExperiences(JSON.parse(e.data));
+                } else {
+                    alert("Api get failed");
+                }
+            });
+
+            api.getProject().then((e) => {
+                if (e.status === 200) {
+                    setProjects(JSON.parse(e.data));
+                    setRenderLoading(false);
+                } else {
+                    alert("Api get failed");
+                }
+            });
+        }
 
 
-    //     fetchData();
-    // }, []);
+        fetchData();
+    }, []);
 
     const renderFront = (
         <motion.div
@@ -129,7 +138,7 @@ export default function Home() {
         </motion.div>
     );
 
-    return (
+    const renderHome = (
         <>
             <Header />
             <Box h="auto">
@@ -138,14 +147,14 @@ export default function Home() {
                     flexDirection={{ base: "column", '2xl': "row" }}
                     justifyContent={"space-between"}
                     paddingTop={10}
-                    h={{ base: "full",'2xl': "70vh" }}
+                    h={{ base: "full", '2xl': "70vh" }}
                     w={{ base: "90%", lg: "80%" }}
                     m={"auto"}
                     gap={"4"}
                 >
                     <Box
                         h={"full"}
-                        w={{ base: "full",'2xl': "65%" }}
+                        w={{ base: "full", '2xl': "65%" }}
                         borderRadius={"3xl"}
                         bg={useColorModeValue("#edf2f7", "#171923")}
                     >
@@ -200,26 +209,50 @@ export default function Home() {
                         w={{ base: "90%", lg: "80%" }}
                         margin={"auto"}
                         gridGap={"4"}
+                        templateColumns={{ base: '', '2xl': "repeat(2, 1fr)" }}
                     >
-                        <GridItem colSpan={4} height={"min"}>
-                            <ExperienceCard data={exampleData} bg={useColorModeValue("#EDFFFC", "#1A202C")} type="Experience" />
-                        </GridItem>
-                        {dataList.map((item, index) => (
-                            <GridItem colSpan={2} height={"min"} key={item}>
+                        {experiences?.map((item, index) => (
+                            <GridItem
+                                height={"min"}
+                                key={item._id}
+                                colSpan={experiences.length % 2 !== 0 ? index === 0 ? 2 : 1 : 1}
+                            >
                                 <ExperienceCard
-                                    data={exampleData}
+                                    data={item}
                                     bg={colorMode === "light" ?
-                                        lightBg[(index + 1) % lightBg.length]
+                                        lightBg[(index) % lightBg.length]
                                         :
-                                        darkBg[(index + 1) % darkBg.length]}
-                                    type="Experience"
+                                        darkBg[(index) % darkBg.length]}
+                                    type="Experience" />
+                            </GridItem>
+                        ))}
+                        {projects?.map((item, index) => (
+                            <GridItem
+                                height={"min"}
+                                key={item._id}
+                                colSpan={projects.length % 2 !== 0 ? index === 0 ? 2 : 1 : 1}
+                            >
+                                <ExperienceCard
+                                    data={item}
+                                    bg={colorMode === "light" ?
+                                        lightBg[(index) % lightBg.length]
+                                        :
+                                        darkBg[(index) % darkBg.length]}
+                                    type="Project"
                                 />
                             </GridItem>
-
                         ))}
                     </Grid>
                 </Box>
             </Box>
+        </>
+    );
+
+    return (
+        <>
+            {renderLoading ? <Loading /> :
+                renderHome
+            }
         </>
     );
 }

@@ -55,7 +55,21 @@ export default function ProjectForm(props: componentProps) {
     }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setLoading(true);
 
+        if (props.type === "new") {
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            const data: projectData = {
+                title: project,
+                orderDate: new Date(orderDate).toISOString(),
+                description: description,
+                img: "",
+            }
+        }
     }
 
     const handleDelete = () => {
@@ -98,7 +112,7 @@ export default function ProjectForm(props: componentProps) {
                                     <FormLabel>Description</FormLabel>
                                     <Textarea size={"md"} defaultValue={description} rows={6} onChange={(e) => setDescription(e.target.value)} />
                                 </FormControl>
-                                <FormControl isRequired>
+                                <FormControl>
                                     <FormLabel>Link</FormLabel>
                                     <Input type="url" defaultValue={link} onChange={(e) => setLink(e.target.value)} />
                                 </FormControl>

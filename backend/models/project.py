@@ -2,6 +2,8 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from bson import ObjectId
 from models.objectID import PyObjectId
+from typing import Union
+
 
 
 # Project model for adding
@@ -11,7 +13,7 @@ class ProjectModel(BaseModel):
     orderDate: datetime = datetime.now()  # This is for ordering
     description: str = Field(...)
     img: str = Field(...)
-    link: str = Field(...)
+    link: Union[str, None] = None
 
     class Config:
         allow_population_by_field_name = True
@@ -34,7 +36,7 @@ class UpdateProjectModel(BaseModel):
     orderDate: datetime = datetime.now()  # This is for ordering
     description: str = Field(...)
     img: str = Field(...)
-    link: str = Field(...)
+    link: Union[str, None] = None
 
     class Config:
         allow_population_by_field_name = True
