@@ -10,7 +10,7 @@ class api_helper {
     getDate = (d: Date) => {
         const month = this.months[d.getMonth()];
         const year = d.getFullYear();
-        return `${month}, ${year}`;
+        return `${month} ${year}`;
     }
 
     // Convert date to 'YYYY-MM-DD' format

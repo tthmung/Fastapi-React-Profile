@@ -71,7 +71,7 @@ export default function ExperienceForm(props: componentProps) {
                 img: "",
             };
 
-            if (endDate) {
+            if (endDate !== "") {
                 data.endDate = new Date(endDate).toISOString();
             }
 
@@ -113,6 +113,11 @@ export default function ExperienceForm(props: componentProps) {
                 description: description,
                 img: props.data.img,
             };
+
+
+            if (endDate !== "") {
+                data.endDate = new Date(endDate).toISOString();
+            }
 
             if (selectedFile) {
                 const formData = new FormData();
