@@ -6,16 +6,14 @@ from pathlib import Path
 env = dotenv_values(".env")
 
 # Mongo DB connection
-client = MongoClient(env["URI"], server_api=ServerApi('1'))
+client = MongoClient(env["DATABASE_URL"], server_api=ServerApi('1'))
 experience_collection = client["FARM_Profile"]["Experiences"]
 project_collection = client["FARM_Profile"]["Projects"]
 
 
 # Allowed origins
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:8000"
+    env["CLIENT_ORIGIN"]
 ]
 
 
