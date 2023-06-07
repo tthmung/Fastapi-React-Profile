@@ -12,17 +12,16 @@ import {
     Link,
     Stack,
     Textarea,
-    Tooltip,
-    useClipboard,
     useColorModeValue,
     VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { BsGithub, BsLinkedin, BsPerson, BsTwitter } from 'react-icons/bs';
+import { BsGithub, BsLinkedin, BsPerson } from 'react-icons/bs';
 import { MdEmail, MdOutlineEmail, MdLocationOn } from 'react-icons/md';
 
+import Clipboard from '../Components/Clipboard';
+
 export default function Footer() {
-    const { onCopy, value, setValue, hasCopied } = useClipboard("");
 
     return (
         <Flex
@@ -50,43 +49,19 @@ export default function Footer() {
                                 align="center"
                                 justify="space-around"
                                 direction={{ base: 'row', md: 'column' }}>
-                                <Tooltip
-                                    label={hasCopied ? 'Email Copied!' : 'Copy Email'}
-                                    closeOnClick={false}
-                                    hasArrow>
-                                    <IconButton
-                                        aria-label="email"
-                                        variant="ghost"
-                                        size="lg"
-                                        fontSize="3xl"
-                                        icon={<MdEmail />}
-                                        _hover={{
-                                            bg: 'blue.500',
-                                            color: useColorModeValue('white', 'gray.700'),
-                                        }}
-                                        onClick={onCopy}
-                                        isRound
-                                    />
-                                </Tooltip>
 
-                                <Tooltip
-                                    label={hasCopied ? 'Email Copied!' : 'Copy Email'}
-                                    closeOnClick={false}
-                                    hasArrow>
-                                    <IconButton
-                                        aria-label="email"
-                                        variant="ghost"
-                                        size="lg"
-                                        fontSize="3xl"
-                                        icon={<MdLocationOn />}
-                                        _hover={{
-                                            bg: 'blue.500',
-                                            color: useColorModeValue('white', 'gray.700'),
-                                        }}
-                                        onClick={onCopy}
-                                        isRound
-                                    />
-                                </Tooltip>
+                                <Clipboard
+                                    toCopy="tthmung@mtu.edu"
+                                    icon={MdEmail}
+                                    type='Email'
+                                />
+
+                                <Clipboard
+                                    toCopy="Battle Creek, MI"
+                                    icon={MdLocationOn}
+                                    type='Location'
+                                />
+
 
                                 <Link href="https://github.com/tthmung" target="_blank" referrerPolicy="no-referrer">
                                     <IconButton
@@ -124,8 +99,8 @@ export default function Footer() {
                                 p={8}
                                 color={useColorModeValue('gray.700', 'whiteAlpha.900')}
                                 shadow="base"
-                                width={{base: "auto", md: "lg"}}
-                                >
+                                width={{ base: "auto", md: "lg" }}
+                            >
                                 <form>
                                     <VStack spacing={5}>
                                         <FormControl isRequired>
