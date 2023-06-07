@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import '@fontsource-variable/montserrat';
 import {
     Card,
     CardBody,
@@ -8,6 +9,15 @@ import {
     Text,
     Flex,
     useColorModeValue,
+    useDisclosure,
+    Modal,
+    Button,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay
 } from "@chakra-ui/react";
 
 import { experienceInterface, projectInterface } from "./Interface";
@@ -20,10 +30,13 @@ interface componentProps {
 }
 
 export default function ExperienceCard(props: componentProps) {
+
     const [isDivSmaller, setIsDivSmaller] = useState<boolean>(false);
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
     const divRef = useRef<HTMLDivElement>(null);
     const helper = new api_helper();
-
     // Check if the card width is smaller than screen width
     useEffect(() => {
         const handleResize = () => {
@@ -42,6 +55,9 @@ export default function ExperienceCard(props: componentProps) {
         };
     }, []);
 
+    const title = props.type === "Experience"
+        ? (props.data as experienceInterface).company
+        : (props.data as projectInterface).title;
 
     const endDate = (props.data as experienceInterface)?.endDate;
     const formattedEndDate = endDate
@@ -50,74 +66,103 @@ export default function ExperienceCard(props: componentProps) {
 
 
     return (
-        <Card
-            ref={divRef}
-            maxW={"full"}
-            minW={"50%"}
-            borderRadius={"3xl"}
-            bg={props.bg}
-            transition={"transform 0.3s"}
-            _hover={{ transform: "scale(1.02)", cursor: "pointer" }}
-            onClick={() => alert("Clicked")}
-        >
-            <CardBody padding={"0"}>
-                <Flex
-                    paddingTop={{ base: "4", "2xl": "24" }}
-                    paddingX={{ base: "4", "2xl": "24" }}
-                    justifyContent={"center"}
-                    alignContent={"baseline"}
-                    height={isDivSmaller ? "sm" : "auto"}
-                >
-                    <Image
-                        src={require(`../uploads/${props.data._id}/${props.data.img}`)}
-                        alt={props.data._id}
-                        borderTopRadius={"3xl"}
-                    />
-                </Flex>
-                <Stack
-                    spacing="3"
-                    borderTopRadius={"xl"}
-                    borderBottomRadius={"3xl"}
-                    bg={useColorModeValue("white", "#1F2937")}
-                    padding={"5"}
-                >
-                    <Heading size="md">
-                        {props.type === "Experience"
-                            ? (props.data as experienceInterface).company
-                            : (props.data as projectInterface).title}
-                    </Heading>
-
-                    {props.type === "Experience" ? (
-                        <Text fontSize={{ base: "sm", lg: "xl" }}>
-                            {(props.data as experienceInterface).position}
+        <>
+            <Modal isCentered isOpen={isOpen} onClose={onClose} size={"3xl"}>
+                <ModalOverlay
+                    background={useColorModeValue("rgba(255, 255, 255, .7)", "rgba(26, 32, 44, .8)")}
+                    backdropFilter='blur(10px) hue-rotate(-0.25turn)'
+                />
+                <ModalContent background={props.bg}>
+                    <ModalHeader fontFamily={"'Montserrat Variable', sans-serif"}>
+                        {title}
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Text fontFamily={"'Montserrat Variable', sans-serif"} fontWeight={"500"}>
+                            {props.data.description.split('\n').map((line, index) => (
+                                <React.Fragment key={index}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
+                            ))}
                         </Text>
-                    ) : (
-                        ""
-                    )}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={onClose}>Close</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+            <Card
+                ref={divRef}
+                maxW={"full"}
+                minW={"50%"}
+                borderRadius={"3xl"}
+                bg={props.bg}
+                transition={"transform 0.3s"}
+                _hover={{ transform: "scale(1.02)", cursor: "pointer" }}
+                onClick={() => onOpen()}
+            >
+                <CardBody padding={"0"}>
                     <Flex
-                        justifyContent={"space-between"}
-                        alignItems={{ base: isDivSmaller ? "" : "center", md: "center" }}
-                        flexWrap={"nowrap"}
-                        flexDirection={{ base: isDivSmaller ? "column" : "row", md: "row" }}
+                        paddingTop={{ base: "4", "2xl": "24" }}
+                        paddingX={{ base: "4", "2xl": "24" }}
+                        justifyContent={"center"}
+                        alignContent={"baseline"}
+                        height={{
+                            base: isDivSmaller ? "100px" : "auto",
+                            sm: isDivSmaller ? "sm" : "auto"
+                        }}
                     >
-                        <Text fontSize={{ base: "sm", lg: "xl" }}>{props.type}</Text>
+                        <Image
+                            src={require(`../uploads/${props.data._id}/${props.data.img}`)}
+                            alt={props.data._id}
+                            borderTopRadius={"3xl"}
+                        />
+                    </Flex>
+                    <Stack
+                        spacing="3"
+                        borderTopRadius={"xl"}
+                        borderBottomRadius={"3xl"}
+                        bg={useColorModeValue("white", "#1F2937")}
+                        padding={"5"}
+                    >
+                        <Heading size="md">
+                            {title}
+                        </Heading>
+
                         {props.type === "Experience" ? (
                             <Text fontSize={{ base: "sm", lg: "xl" }}>
-                                {`
-                                    ${helper.getDate(
-                                    new Date(
-                                        (props.data as experienceInterface).startDate
-                                    )
-                                )}
-                                    -
-                                    ${formattedEndDate}`}
+                                {(props.data as experienceInterface).position}
                             </Text>
                         ) : (
                             ""
                         )}
-                    </Flex>
-                </Stack>
-            </CardBody>
-        </Card>
+                        <Flex
+                            justifyContent={"space-between"}
+                            alignItems={{ base: isDivSmaller ? "" : "center", md: "center" }}
+                            flexWrap={"nowrap"}
+                            flexDirection={{ base: isDivSmaller ? "column" : "row", md: "row" }}
+                        >
+                            <Text fontSize={{ base: "sm", lg: "xl" }}>{props.type}</Text>
+                            {props.type === "Experience" ? (
+                                <Text fontSize={{ base: "sm", lg: "xl" }}>
+                                    {`
+                                    ${helper.getDate(
+                                        new Date(
+                                            (props.data as experienceInterface).startDate
+                                        )
+                                    )}
+                                    -
+                                    ${formattedEndDate}`}
+                                </Text>
+                            ) : (
+                                ""
+                            )}
+                        </Flex>
+                    </Stack>
+                </CardBody>
+            </Card>
+        </>
+
     );
 }

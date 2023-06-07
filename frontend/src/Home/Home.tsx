@@ -17,6 +17,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { experienceInterface, projectInterface } from '../Components/Interface';
 import Header from './Header';
+import Footer from './Footer';
 import ExperienceCard from '../Components/Card';
 import Loading from '../Components/Loading';
 
@@ -245,6 +246,7 @@ export default function Home() {
                     </Grid>
                 </Box>
             </Box>
+            <Footer />
         </>
     );
 
