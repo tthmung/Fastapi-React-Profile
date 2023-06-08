@@ -16,6 +16,5 @@ origins = [
     env["CLIENT_ORIGIN"]
 ]
 
-
 # Media (Upload)
 root = f"{Path().absolute().parent}/uploads/"

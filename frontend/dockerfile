@@ -1,0 +1,21 @@
+# Use an appropriate base image for your frontend, such as node.js
+FROM node:16
+
+# Set the working directory inside the container
+WORKDIR /app/frontend
+
+# Copy the frontend files to the container
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+COPY . .
+
+ENV PORT=8000
+
+# Expose the port on which your frontend server will run (if applicable)
+EXPOSE 8000
+
+# Define the command to run your frontend application
+CMD ["npm", "start"]

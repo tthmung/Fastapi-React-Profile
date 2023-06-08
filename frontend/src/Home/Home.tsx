@@ -23,12 +23,9 @@ import Loading from '../Components/Loading';
 
 const lightBg = ["#EDFFFC", "#f9ffed", "#cff9ce", "#FFF4E3", "#F9FAFF", "#FFFCE6"];
 const darkBg = ["#1A202C", "#2D3748", "#1C2231", "#2B3442", "#202C37", "#283845"];
-const dataList = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'];
 
 export default function Home() {
 
-    const [back, setBack] = useState({});
-    const [mousePosition, setMousePosition] = useState({ x: Number, y: Number });
     const [isFrontVisible, setIsFrontVisible] = useState<boolean>(true);
     const { colorMode } = useColorMode();
     const [renderLoading, setRenderLoading] = useState<boolean>(true);
@@ -37,21 +34,7 @@ export default function Home() {
 
     const [projects, setProjects] = useState<projectInterface[]>();
 
-    // Get the mouse position
-    useEffect(() => {
-        const updateMousePosition = (ev: any) => {
-            setMousePosition({ x: ev.clientX, y: ev.clientY });
-        }
-
-        window.addEventListener('mousemove', updateMousePosition);
-
-        return () => {
-            window.removeEventListener('mousemove', updateMousePosition);
-        }
-    });
-
-
-    // Get apis
+    //
     useEffect(() => {
         const api = new API();
 
