@@ -1,7 +1,6 @@
-from pydantic import BaseModel, EmailStr
-from typing import List
+from pydantic import BaseModel
 
-class EmailSchema(BaseModel):
+class EmailBody(BaseModel):
+    email: str
     name: str
-    email: List[EmailStr]
-    description: str
+    message: str

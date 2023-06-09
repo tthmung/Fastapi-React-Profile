@@ -1,4 +1,5 @@
 import axios from "axios";
+import { emailData, experienceData, projectData, projectInterface } from "./Components/Interface";
 
 class API {
     client: any;
@@ -32,12 +33,12 @@ class API {
         return response;
     }
 
-    createProject = async (data: any) => {
+    createProject = async (data: projectInterface) => {
         let response = await this.client.post("/api/projects/new", data);
         return response;
     }
 
-    updateProject = async (data: any, id: string) => {
+    updateProject = async (data: projectInterface, id: string) => {
         let response = await this.client.put(`/api/projects/update?id=${id}`, data);
         return response;
     }
@@ -52,12 +53,12 @@ class API {
         return response;
     }
 
-    createExperience = async (data: any) => {
+    createExperience = async (data: experienceData) => {
         let response = await this.client.post("/api/experiences/new", data);
         return response;
     }
 
-    updateExperience = async (data: any, id: string) => {
+    updateExperience = async (data: experienceData, id: string) => {
         let response = await this.client.put(`/api/experiences/update?id=${id}`, data);
         return response;
     }
@@ -81,6 +82,12 @@ class API {
         let response = await this.client.delete(`/api/files/delete?id=${id}&curr_file=${curr_file}`);
         return response;
     }
+
+    sendEmail = async (data: emailData) => {
+        let response = await this.client.post("/api/email/send", data);
+        return response;
+    }
+
 }
 
 export default API;

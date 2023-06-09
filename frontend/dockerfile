@@ -2,7 +2,7 @@
 FROM node:16
 
 # Set the working directory inside the container
-WORKDIR /app/frontend
+WORKDIR /app
 
 # Copy the frontend files to the container
 COPY package*.json ./
@@ -12,10 +12,10 @@ RUN npm install
 
 COPY . .
 
-ENV PORT=8000
+ENV PORT=3000
 
 # Expose the port on which your frontend server will run (if applicable)
-EXPOSE 8000
+EXPOSE 3000
 
 # Define the command to run your frontend application
 CMD ["npm", "start"]

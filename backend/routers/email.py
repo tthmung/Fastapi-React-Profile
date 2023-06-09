@@ -1,13 +1,11 @@
 from fastapi import APIRouter
 from starlette.responses import JSONResponse
-from fastapi_mail import FastMail, MessageSchema, MessageType
 from fastapi import status
 from smtplib import SMTP_SSL
 from email.mime.text import MIMEText
-from pydantic import BaseModel
 
-from config import mail_conf, env
-from models.email import *
+from config import env
+from models.email import EmailBody
 
 router = APIRouter(
     prefix="/api/email",
@@ -15,18 +13,14 @@ router = APIRouter(
     responses={404: {"description": "Not found"}}
 )
 
-class EmailBody(BaseModel):
-    subject: str
-    message: str
-
-
-@router.post("/")
-async def simple_send(body: EmailBody) -> JSONResponse:
+@router.post("/send")
+async def send_contact(body: EmailBody) -> JSONResponse:
 
     try:
-        msg = MIMEText(body.message, "plain")
-        msg['Subject'] = body.subject
-        msg['From'] = f'Denolyrics <{env["MAIL_USER"]}>'
+        message = f'EMAIL: {body.email}\nNAME: {body.name}\nMESSAGE: {body.message}'
+        msg = MIMEText(message, "plain")
+        msg['Subject'] = "tthmung contact"
+        msg['From'] = env["MAIL_USER"]
         msg['To'] = env["MAIL_USER"]
 
         port = 465  # For SSL

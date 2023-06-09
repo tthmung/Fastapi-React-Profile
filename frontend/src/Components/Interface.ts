@@ -41,3 +41,10 @@ export interface projectData {
     img: string,
     link?: string
 }
+
+// Email interface
+export interface emailData {
+    email: string,
+    name: string,
+    message: string
+}
