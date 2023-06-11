@@ -33,12 +33,12 @@ class API {
         return response;
     }
 
-    createProject = async (data: projectInterface) => {
+    createProject = async (data: projectData) => {
         let response = await this.client.post("/api/projects/new", data);
         return response;
     }
 
-    updateProject = async (data: projectInterface, id: string) => {
+    updateProject = async (data: projectData, id: string) => {
         let response = await this.client.put(`/api/projects/update?id=${id}`, data);
         return response;
     }

@@ -14,14 +14,52 @@ import {
     Textarea,
     useColorModeValue,
     VStack,
+    useToast
 } from '@chakra-ui/react';
 import React from 'react';
 import { BsGithub, BsLinkedin, BsPerson } from 'react-icons/bs';
 import { MdEmail, MdOutlineEmail, MdLocationOn } from 'react-icons/md';
 
+
 import Clipboard from '../Components/Clipboard';
+import API from '../api';
+import { emailData } from '../Components/Interface';
 
 export default function Footer() {
+
+    const [name, setName] = React.useState<string>("");
+    const [email, setEmail] = React.useState<string>("");
+    const [description, setDescription] = React.useState<string>("");
+
+    const toast = useToast();
+
+    const handleSubmit = () => {
+        const api = new API();
+
+        const data : emailData = {
+            name: name,
+            email: email,
+            message: description
+        };
+
+        api.sendEmail(data).then((e) => {
+            if (e) {
+                if (e.status === 200) {
+                    toast({
+                        title: "Thank you I will get back to you ASAP.",
+                        status: "success",
+                        isClosable: true,
+                    });
+                } else {
+                    toast({
+                        title: "Error in sending mail.",
+                        status: "error",
+                        isClosable: true,
+                    });
+                }
+            }
+        });
+    }
 
     return (
         <Flex
@@ -101,14 +139,18 @@ export default function Footer() {
                                 shadow="base"
                                 width={{ base: "auto", md: "lg" }}
                             >
-                                <form>
+                                <form onSubmit={handleSubmit}>
                                     <VStack spacing={5}>
                                         <FormControl isRequired>
                                             <FormLabel>Name</FormLabel>
 
                                             <InputGroup>
                                                 <InputLeftElement children={<BsPerson />} />
-                                                <Input type="text" name="name" placeholder="Your Name" />
+                                                <Input
+                                                    type="text"
+                                                    name="name"
+                                                    placeholder="Your Name"
+                                                    onChange={(e) => setName(e.target.value)} />
                                             </InputGroup>
                                         </FormControl>
 
@@ -121,6 +163,7 @@ export default function Footer() {
                                                     type="email"
                                                     name="email"
                                                     placeholder="Your Email"
+                                                    onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </InputGroup>
                                         </FormControl>
@@ -133,6 +176,7 @@ export default function Footer() {
                                                 placeholder="Your Message"
                                                 rows={6}
                                                 resize="none"
+                                                onChange={(e) => setDescription(e.target.value)}
                                             />
                                         </FormControl>
 
