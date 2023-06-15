@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
+
 import API from '../api'
 import Header from './Header';
 import Loading from '../Components/Loading';
 import ExperienceForm from './ExperienceForm';
-import { experienceInterface, projectInterface } from '../Components/Interface'
+import { experienceInterface, projectInterface } from '../Components/Interface';
+import Login from './Login';
 
 import {
     Box,
@@ -25,6 +27,7 @@ export default function Admin() {
     const navigate = useNavigate();
     let { collection, id } = useParams<string>();
     const [render, setRender] = useState<boolean>(true);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
     const [experiences, setExperiences] = useState<experienceInterface[]>([{
         _id: "",
@@ -44,6 +47,13 @@ export default function Admin() {
         img: "",
         link: ""
     }]);
+
+    useEffect(() => {
+        if (!isAdmin) {
+            navigate('/login');
+        }
+    });
+
 
     // Get the data collection from api calls
     useEffect(() => {
