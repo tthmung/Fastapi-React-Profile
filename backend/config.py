@@ -28,6 +28,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/admin/token")
 
+# Admin
+admin_user = env["ADMIN_USER"]
+admin_pass = pwd_context.encrypt(env["ADMIN_PASSWORD"])
 
 # Media (Upload)
 root = f"{Path().absolute().parent}/uploads/"

@@ -1,11 +1,12 @@
-from fastapi import APIRouter, UploadFile, File
-from fastapi.responses import Response, JSONResponse
-from fastapi import  Body, status
-from fastapi.encoders import jsonable_encoder
-from bson.json_util import dumps
+from fastapi import APIRouter, UploadFile, Depends
+from fastapi.responses import JSONResponse
+from fastapi import  status
 from datetime import datetime
 from config import root
 import os
+
+from authenticate import get_current_user
+from models.user import User
 
 router = APIRouter(
     prefix="/api/files",
@@ -14,7 +15,7 @@ router = APIRouter(
 )
 
 @router.post("/upload", response_description="Upload a image file")
-async def upload_file(file: UploadFile, id: str | None = None):
+async def upload_file(file: UploadFile, id: str | None = None, current_user: User = Depends(get_current_user)):
 
     try:
         new_filename = generate_new_name(file)
@@ -32,7 +33,7 @@ async def upload_file(file: UploadFile, id: str | None = None):
 
 
 @router.put("/update", response_description="Update a image file by deleting and reuploading")
-async def update_file(file: UploadFile, id: str | None = None, curr_file: str | None = None):
+async def update_file(file: UploadFile, id: str | None = None, curr_file: str | None = None, current_user: User = Depends(get_current_user)):
     try:
         # delete existing file first
         os.remove(f"{root}/{id}/{curr_file}")
@@ -48,7 +49,7 @@ async def update_file(file: UploadFile, id: str | None = None, curr_file: str | 
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=e)
 
 @router.delete("/delete", response_description="delete a file")
-async def delete_file(id: str | None = None, curr_file: str | None = None):
+async def delete_file(id: str | None = None, curr_file: str | None = None, current_user: User = Depends(get_current_user)):
     try:
         file_location = f"{root}/{id}/{curr_file}"
         os.remove(file_location)

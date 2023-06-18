@@ -1,11 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Body, status
 from fastapi.responses import Response, JSONResponse
-from fastapi import Body, status
 from fastapi.encoders import jsonable_encoder
 from bson.json_util import dumps
 from typing import List
+
 from models.experience import *
+from models.user import User
 from config import experience_collection
+from authenticate import get_current_user
 
 router = APIRouter(
     prefix="/api/experiences",
@@ -32,7 +34,7 @@ async def read_experiences():
 @router.post(
     "/new", response_description="Add new experience", response_model=ExperienceModel
 )
-async def create_experience(experience: ExperienceModel = Body(...)):
+async def create_experience(current_user: User = Depends(get_current_user), experience: ExperienceModel = Body(...)):
     try:
         experience_body = jsonable_encoder(experience)
         new_experience = experience_collection.insert_one(experience_body)
@@ -49,7 +51,7 @@ async def create_experience(experience: ExperienceModel = Body(...)):
     response_model=UpdateExperienceModel,
 )
 async def update_Experience(
-    id: str | None = None, experience: UpdateExperienceModel = Body(...)
+    current_user: User = Depends(get_current_user), id: str | None = None, experience: UpdateExperienceModel = Body(...)
 ):
     try:
         experience_body = jsonable_encoder(experience)
@@ -65,7 +67,7 @@ async def update_Experience(
 @router.delete(
     "/delete", response_description="delete experience", response_model=ExperienceModel
 )
-async def delete_experience(id: str | None = None):
+async def delete_experience(current_user: User = Depends(get_current_user), id: str | None = None):
     try:
         deleted_experience = experience_collection.delete_one({"_id": id})
         return JSONResponse(
