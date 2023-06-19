@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import jwt
 
@@ -55,4 +56,4 @@ async def login_for_access_token(
 async def check_admin(
     current_user: Annotated[User, Depends(get_current_user)]
 ):
-    return User(username=current_user)
+    return JSONResponse(status_code=status.HTTP_200_OK, content=User(username=current_user))
