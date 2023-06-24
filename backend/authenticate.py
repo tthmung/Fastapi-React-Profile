@@ -1,18 +1,10 @@
-from typing import Annotated
-
 from fastapi import Depends, HTTPException, status, Request
-from jose import JWTError, jwt
+from jose import jwt
 
 from models.token import TokenData
 
-from config import (
-    SECRET_KEY,
-    ALGORITHM,
-    pwd_context,
-    oauth2_scheme,
-    admin_user,
-    admin_pass
-)
+from config import SECRET_KEY, ALGORITHM, pwd_context, admin_user, admin_pass
+
 
 def verify_password(plain_password):
     return pwd_context.verify(plain_password, admin_pass)

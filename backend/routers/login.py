@@ -10,17 +10,10 @@ from models.token import Token
 from models.user import User
 from authenticate import *
 
-from config import (
-    SECRET_KEY,
-    ALGORITHM,
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    secure
-)
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, secure
 
 router = APIRouter(
-    prefix="/api/admin",
-    tags=["admin"],
-    responses={404: {"description": "Not found"}}
+    prefix="/api/admin", tags=["admin"], responses={404: {"description": "Not found"}}
 )
 
 
@@ -36,9 +29,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 @router.post("/login", response_model=Token)
-async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends()
-):
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -51,18 +42,21 @@ async def login_for_access_token(
         data={"sub": user}, expires_delta=access_token_expires
     )
     response = JSONResponse(status_code=status.HTTP_200_OK, content="authenticated")
-    response.set_cookie(key="access_token",value=f"{access_token}", httponly=True, secure=secure)  #set HttpOnly cookie in response
+    response.set_cookie(
+        key="access_token", value=f"{access_token}", httponly=True, secure=secure
+    )  # set HttpOnly cookie in response
     return response
 
 
 @router.get("/", response_model=User)
-async def check_admin(
-    current_user: Annotated[User, Depends(get_current_user)]
-):
+async def check_admin(current_user: Annotated[User, Depends(get_current_user)]):
     return JSONResponse(status_code=status.HTTP_200_OK, content=current_user)
+
 
 @router.post("/logout")
 async def log_out(current_user: Annotated[User, Depends(get_current_user)]):
-    response = JSONResponse(status_code=status.HTTP_200_OK, content=f'{current_user} logout')
+    response = JSONResponse(
+        status_code=status.HTTP_200_OK, content=f"{current_user} logout"
+    )
     response.delete_cookie(key="access_token")
     return response
