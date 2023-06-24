@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter, Response
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import jwt
@@ -13,7 +13,8 @@ from authenticate import *
 from config import (
     SECRET_KEY,
     ALGORITHM,
-    ACCESS_TOKEN_EXPIRE_MINUTES
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+    secure
 )
 
 router = APIRouter(
@@ -34,9 +35,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-@router.post("/token", response_model=Token)
+@router.post("/login", response_model=Token)
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    form_data: OAuth2PasswordRequestForm = Depends()
 ):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
@@ -49,11 +50,19 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    response = JSONResponse(status_code=status.HTTP_200_OK, content="authenticated")
+    response.set_cookie(key="access_token",value=f"{access_token}", httponly=True, secure=secure)  #set HttpOnly cookie in response
+    return response
 
 
 @router.get("/", response_model=User)
 async def check_admin(
     current_user: Annotated[User, Depends(get_current_user)]
 ):
-    return JSONResponse(status_code=status.HTTP_200_OK, content=User(username=current_user))
+    return JSONResponse(status_code=status.HTTP_200_OK, content=current_user)
+
+@router.post("/logout")
+async def log_out(current_user: Annotated[User, Depends(get_current_user)]):
+    response = JSONResponse(status_code=status.HTTP_200_OK, content=f'{current_user} logout')
+    response.delete_cookie(key="access_token")
+    return response

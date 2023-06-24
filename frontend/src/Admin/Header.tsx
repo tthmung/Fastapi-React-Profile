@@ -53,7 +53,7 @@ export default function Header() {
                             bg: 'pink.300',
                             color: "white"
                         }}>
-                        Sign In
+                        Sign out
                     </Button>
                 </Stack>
             </Flex>

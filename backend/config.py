@@ -34,3 +34,6 @@ admin_pass = pwd_context.encrypt(env["ADMIN_PASSWORD"])
 
 # Media (Upload)
 root = f"{Path().absolute().parent}/uploads/"
+
+# Production
+secure = True if env["IS_PRODUCTION"] == "True" else False

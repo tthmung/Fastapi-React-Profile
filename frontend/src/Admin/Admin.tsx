@@ -6,7 +6,6 @@ import Header from './Header';
 import Loading from '../Components/Loading';
 import ExperienceForm from './ExperienceForm';
 import { experienceInterface, projectInterface } from '../Components/Interface';
-import Login from './Login';
 
 import {
     Box,
@@ -27,7 +26,6 @@ export default function Admin() {
     const navigate = useNavigate();
     let { collection, id } = useParams<string>();
     const [render, setRender] = useState<boolean>(true);
-    const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
     const [experiences, setExperiences] = useState<experienceInterface[]>([{
         _id: "",
@@ -48,36 +46,35 @@ export default function Admin() {
         link: ""
     }]);
 
-    useEffect(() => {
-        if (!isAdmin) {
-            navigate('/login');
-        }
-    });
-
-
     // Get the data collection from api calls
     useEffect(() => {
         const api = new API();
 
         const fetchData = async () => {
-            let getExperience = api.getExperience();
-            getExperience.then((e) => {
-                if (e.status === 200) {
-                    setExperiences(JSON.parse(e.data));
-                }
-            })
 
-            let getProject = api.getProject();
-            getProject.then((e) => {
-                setRender(false);
-                setProjects(JSON.parse(e.data));
+            api.isAdmin().then((e) => {
+                let getExperience = api.getExperience();
+                getExperience.then((e) => {
+                    if (e.status === 200) {
+                        setExperiences(JSON.parse(e.data));
+                    }
+                })
+
+                let getProject = api.getProject();
+                getProject.then((e) => {
+                    setRender(false);
+                    setProjects(JSON.parse(e.data));
+                });
+            }).catch((e) => {
+                console.log(e);
+                navigate("/login");
             });
         }
 
 
         fetchData();
 
-    }, [])
+    }, [navigate])
 
 
     // Render collections
