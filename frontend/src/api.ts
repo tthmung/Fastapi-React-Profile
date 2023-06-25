@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getCookie } from "typescript-cookie";
 import { emailData, experienceData, projectData } from "./Components/Interface";
 
 class API {
@@ -130,7 +129,6 @@ class API {
     };
 
     isAdmin = async () => {
-        console.log(getCookie("access_token"));
         let response = await this.client.get("/api/admin", {
             withCredentials: true,
         });

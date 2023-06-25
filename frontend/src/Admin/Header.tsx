@@ -5,9 +5,26 @@ import {
     Stack,
     Link,
 } from '@chakra-ui/react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
+import API from '../api';
 
 export default function Header() {
 
+    const api = new API();
+    const navigate = useNavigate();
+
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        api.logout().then(() => {
+            navigate("/login");
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
 
     return (
         <Box position={"absolute"} w={"100vw"} zIndex={"20"}>
@@ -52,7 +69,9 @@ export default function Header() {
                         _hover={{
                             bg: 'pink.300',
                             color: "white"
-                        }}>
+                        }}
+                        onClick={(e) => handleSubmit(e)}
+                        >
                         Sign out
                     </Button>
                 </Stack>

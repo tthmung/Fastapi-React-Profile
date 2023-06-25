@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import HTTPException, status, Request
 from jose import jwt
 
 from models.token import TokenData
