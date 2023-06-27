@@ -51,7 +51,7 @@ export default function ExperienceForm(props: componentProps) {
             status: code,
             isClosable: true,
         });
-        navigate(-1);
+        navigate("/admin/experiences");
     }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

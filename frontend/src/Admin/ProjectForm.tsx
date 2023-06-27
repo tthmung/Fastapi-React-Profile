@@ -52,7 +52,7 @@ export default function ProjectForm(props: componentProps) {
             status: code,
             isClosable: true,
         });
-        navigate(-1);
+        navigate("/admin/projects");
     }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

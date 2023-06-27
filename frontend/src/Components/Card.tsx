@@ -64,6 +64,9 @@ export default function ExperienceCard(props: componentProps) {
         ? helper.getDate(new Date(endDate))
         : "Current";
 
+    const openTab = (href: string) => {
+        window.open(href, "_blank");
+    }
 
     return (
         <>
@@ -88,6 +91,16 @@ export default function ExperienceCard(props: componentProps) {
                         </Text>
                     </ModalBody>
                     <ModalFooter>
+                        {props.type === "Project" ?
+                            (props.data as projectInterface).link !== "" ?
+                                <Button colorScheme='blue' mr={3} onClick={() => openTab((props.data as projectInterface).link)}>
+                                    Link
+                                </Button>
+                                :
+                                ""
+                            :
+                            ""
+                        }
                         <Button onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>

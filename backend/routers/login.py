@@ -54,9 +54,9 @@ async def check_admin(current_user: Annotated[User, Depends(get_current_user)]):
 
 
 @router.post("/logout")
-async def log_out(current_user: Annotated[User, Depends(get_current_user)]):
+async def log_out():
     response = JSONResponse(
-        status_code=status.HTTP_200_OK, content=f"{current_user} logout"
+        status_code=status.HTTP_200_OK, content=f"Content deleted"
     )
     response.delete_cookie(key="access_token")
     return response

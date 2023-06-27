@@ -157,7 +157,8 @@ class API {
         let response = await this.client.post("api/admin/logout",
             {
                 withCredentials: true
-            });
+            }
+            );
         return response;
     }
 }
