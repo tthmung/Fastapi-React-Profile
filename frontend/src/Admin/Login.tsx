@@ -11,7 +11,8 @@ import {
   Stack,
   Button,
   Heading,
-  useToast
+  useToast,
+  DarkMode
 } from '@chakra-ui/react';
 
 import API from '../api';
@@ -38,57 +39,61 @@ export default function Login() {
         title: "Error logging",
         status: "error",
         isClosable: true,
-    });
+      });
     });
   }
 
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg="gray.800">
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-        </Stack>
-        <Box
-          rounded={'lg'}
-          bg="gray.700"
-          boxShadow={'lg'}
-          p={8}>
-          <form onSubmit={handleSubmit}>
-            <Stack spacing={4}>
-              <FormControl id="email">
-                <FormLabel>Username</FormLabel>
-                <Input type="text" onChange={(e) => setUsername(e.target.value)} />
-              </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input type="password" onChange={(e) => setPassword(e.target.value)} />
-              </FormControl>
-              <Stack spacing={10}>
-                <Stack
-                  direction={{ base: 'column', sm: 'row' }}
-                  align={'start'}
-                  justify={'space-between'}>
-                  <Checkbox>Remember me</Checkbox>
-                </Stack>
-                <Button
-                  bg={'blue.400'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'blue.500',
-                  }}
-                  type='submit'
+    <DarkMode>
+      <Flex
+        minH={'100vh'}
+        align={'center'}
+        justify={'center'}
+        bg="gray.800"
+        color={"white"}
+        >
+        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+          <Stack align={'center'}>
+            <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+          </Stack>
+          <Box
+            rounded={'lg'}
+            bg="gray.700"
+            boxShadow={'lg'}
+            p={8}>
+            <form onSubmit={handleSubmit}>
+              <Stack spacing={4}>
+                <FormControl id="email">
+                  <FormLabel>Username</FormLabel>
+                  <Input type="text" onChange={(e) => setUsername(e.target.value)} />
+                </FormControl>
+                <FormControl id="password">
+                  <FormLabel>Password</FormLabel>
+                  <Input type="password" onChange={(e) => setPassword(e.target.value)} />
+                </FormControl>
+                <Stack spacing={10}>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row' }}
+                    align={'start'}
+                    justify={'space-between'}>
+                    <Checkbox>Remember me</Checkbox>
+                  </Stack>
+                  <Button
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                    type='submit'
                   >
-                  Sign in
-                </Button>
+                    Sign in
+                  </Button>
+                </Stack>
               </Stack>
-            </Stack>
-          </form>
-        </Box>
-      </Stack>
-    </Flex>
+            </form>
+          </Box>
+        </Stack>
+      </Flex>
+    </DarkMode>
   );
 }
