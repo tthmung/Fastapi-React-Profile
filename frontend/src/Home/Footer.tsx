@@ -65,7 +65,7 @@ export default function Footer() {
         <Flex
             align="center"
             justify="center"
-            id="contact"
+            id="Contact"
         >
             <Box
                 borderRadius="lg"

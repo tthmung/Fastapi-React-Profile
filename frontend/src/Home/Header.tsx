@@ -19,7 +19,7 @@ const links = [
   { name: "Home", href: "#Home", bg: "#FA8072", emoji: "🎮", textColor: "#5e302b" },
   { name: "Experience", href: "#Experiences", bg: "#f6c6ea", emoji: "🥑", textColor: "#5c4a58" },
   { name: "Contact", href: "#Contact", bg: "#ffe66e", emoji: "⚽", textColor: "#605629" },
-  { name: "Resume", href: "#Resume", bg: "#9fe6a0", emoji: "🔮", textColor: "#3c563c" },
+  { name: "Resume", href: require("../static/Redacted_Resume.pdf"), bg: "#9fe6a0", emoji: "🔮", textColor: "#3c563c", target: "_blank" },
 ];
 
 export default function Header() {
@@ -76,6 +76,9 @@ export default function Header() {
             transition={".4s cubic-bezier(.68, -.6, .32, 1.6)"}
             _hover={{ textDecoration: "none", py: "0", px: "24", textColor: "black" }}
             fontWeight={"semibold"}
+            target={link.target}
+            rel="noopener noreferrer"
+            onClick={() => handleIconClick()}
           >
             <span>
               {link.emoji}

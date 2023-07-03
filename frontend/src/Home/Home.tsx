@@ -141,6 +141,7 @@ export default function Home() {
                         w={{ base: "full", '2xl': "65%" }}
                         borderRadius={"3xl"}
                         bg={useColorModeValue("#edf2f7", "#171923")}
+                        id={"Home"}
                     >
                         <Flex
                             paddingY={{ base: "10", lg: "20" }}
@@ -163,6 +164,7 @@ export default function Home() {
                                         _hover: { bg: "#393939" },
                                         _active: { bg: "#5f5f5f" }
                                     }}
+                                    onClick={() => document.getElementById('Experiences')?.scrollIntoView({ behavior: 'smooth' })}
                                 >
                                     View my work
                                 </Button>
@@ -188,7 +190,7 @@ export default function Home() {
 
                     />
                 </Flex>
-                <Box marginTop={"4"}>
+                <Box marginTop={"4"} id={"Experiences"}>
                     <Grid
                         w={{ base: "90%", lg: "80%" }}
                         margin={"auto"}
