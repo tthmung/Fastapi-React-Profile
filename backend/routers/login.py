@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status, APIRouter, Response
+from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import jwt
@@ -53,10 +53,8 @@ async def check_admin(current_user: Annotated[User, Depends(get_current_user)]):
     return JSONResponse(status_code=status.HTTP_200_OK, content=current_user)
 
 
-@router.post("/logout")
-async def log_out():
-    response = JSONResponse(
-        status_code=status.HTTP_200_OK, content=f"Content deleted"
-    )
+@router.get("/logout")
+async def log_out(current_user: User = Depends(get_current_user)):
+    response = JSONResponse(status_code=status.HTTP_200_OK, content="Logged out successfully")
     response.delete_cookie(key="access_token")
     return response

@@ -19,18 +19,28 @@ import API from '../api';
 
 export default function Login() {
 
+  const api = React.useMemo(() => new API(), []);
+
   const navigate = useNavigate();
   const toast = useToast();
 
   const [username, setUsername] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
+  React.useEffect(() => {
+
+    api.isAdmin().then(() => {
+      navigate("/admin");
+    }).catch(() => {
+      console.log("Not login");
+    });
+
+  }, [api, navigate]);
+
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
     event.preventDefault();
-
-    const api = new API();
 
     api.authenticate(username, password).then((e) => {
       navigate("/admin");
