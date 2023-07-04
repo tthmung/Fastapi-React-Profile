@@ -8,7 +8,7 @@ backend/routes/__pycache__/*
 backend/models/__pycache__/*
 
 # Media
-uploads/*
+backend/media/*
 
 #Backend env
 backend/.env

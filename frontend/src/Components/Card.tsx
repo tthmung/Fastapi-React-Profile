@@ -31,6 +31,8 @@ interface componentProps {
 
 export default function ExperienceCard(props: componentProps) {
 
+    console.log(process.env.REACT_APP_URL);
+
     const [isDivSmaller, setIsDivSmaller] = useState<boolean>(false);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -127,7 +129,7 @@ export default function ExperienceCard(props: componentProps) {
                         }}
                     >
                         <Image
-                            src={require(`../uploads/${props.data._id}/${props.data.img}`)}
+                            src={`${process.env.REACT_APP_API_URL}media/${props.data._id}/${props.data.img}`}
                             alt={props.data._id}
                             borderTopRadius={"3xl"}
                         />

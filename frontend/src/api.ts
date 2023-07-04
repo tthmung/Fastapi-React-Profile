@@ -7,7 +7,7 @@ class API {
   apiUrl: string;
 
   constructor() {
-    this.apiUrl = "http://localhost:8000/";
+    this.apiUrl = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "";
 
     // Create axios client, pre-configured with baseURL
     this.client = axios.create({

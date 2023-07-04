@@ -22,6 +22,8 @@ import ProjectForm from './ProjectForm';
 
 export default function Admin() {
 
+    console.log(process.env.PUBLIC_URL);
+
     const location = useLocation();
     const navigate = useNavigate();
     let { collection, id } = useParams<string>();

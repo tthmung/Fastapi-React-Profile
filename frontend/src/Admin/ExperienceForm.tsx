@@ -214,7 +214,7 @@ export default function ExperienceForm(props: componentProps) {
                                     :
                                     <FormControl>
                                         <Link
-                                            href={require(`../uploads/${props.data._id}/${props.data.img}`)}
+                                            href={`${process.env.REACT_APP_API_URL}media/${props.data._id}/${props.data.img}`}
                                             target="_blank"
                                             rel="noreferrer"
                                             textColor={"blue.200"}
