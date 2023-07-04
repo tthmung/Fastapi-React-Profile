@@ -28,7 +28,7 @@ admin_user = env["ADMIN_USER"]
 admin_pass = pwd_context.encrypt(env["ADMIN_PASSWORD"])
 
 # Media (Upload)
-root = f"{Path().absolute().parent}/uploads/"
+root = f"{Path().absolute().parent}/frontend/src/uploads/"
 
 # Production
 secure = True if env["IS_PRODUCTION"] == "True" else False
