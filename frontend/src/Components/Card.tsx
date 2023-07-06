@@ -31,8 +31,6 @@ interface componentProps {
 
 export default function ExperienceCard(props: componentProps) {
 
-    console.log(process.env.REACT_APP_URL);
-
     const [isDivSmaller, setIsDivSmaller] = useState<boolean>(false);
 
     const { isOpen, onOpen, onClose } = useDisclosure();

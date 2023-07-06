@@ -34,7 +34,6 @@ export default function Home() {
 
     const [projects, setProjects] = useState<projectInterface[]>();
 
-    //
     useEffect(() => {
         const api = new API();
 
@@ -42,19 +41,21 @@ export default function Home() {
             api.getExperience().then((e) => {
                 if (e.status === 200) {
                     setExperiences(JSON.parse(e.data));
+                    return api.getProject();
                 } else {
                     alert("Api get failed");
                 }
-            });
-
-            api.getProject().then((e) => {
+            }).then((e) => {
                 if (e.status === 200) {
                     setProjects(JSON.parse(e.data));
                     setRenderLoading(false);
                 } else {
                     alert("Api get failed");
                 }
+            }).catch(() => {
+                alert("Not connected to backend");
             });
+
         }
 
 
