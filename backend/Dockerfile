@@ -1,17 +1,17 @@
-#
+# Base image
 FROM python:3.11
 
-#
+# Set the working directory
 WORKDIR /backend
 
-#
+# Copy the requirements file
 COPY ./requirements.txt /backend/requirements.txt
 
-#
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+# Install development dependencies
+RUN pip install --no-cache-dir --upgrade -r /backend/requirements.txt
 
-#
-COPY . /backend
+# Copy the application code
+COPY . /backend/app
 
-#
-CMD ["uvicorn", "main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
+# Set up the development server
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8000"]
