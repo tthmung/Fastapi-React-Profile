@@ -1,4 +1,4 @@
-# Fetching the latest node image on apline linux
+# Stage 1: Build the Node.js application
 FROM node:alpine AS builder
 
 # Declaring env
@@ -17,23 +17,26 @@ COPY . .
 # Building our application
 RUN npm run build
 
-# Fetching the latest nginx image
+# Stage 2: Set up Nginx and obtain SSL certificates
 FROM nginx
 
-# Installing Certbot and obtaining SSL certificate
-RUN apk add --no-cache certbot openssl && \
-    mkdir -p /etc/letsencrypt/live && \
-    openssl dhparam -out /etc/letsencrypt/dhparam.pem 2048 && \
-    certbot certonly --standalone --agree-tos --email thawngtha122@example.com -d tthmung.com -n
-
-# Copying built assets from builder
+# Copying built assets from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
+
+# Install necessary packages using apt-get (for Debian/Ubuntu-based images)
+RUN apt-get update && \
+    apt-get install -y certbot openssl && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copying our nginx.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Copy the renewal script into the container
+COPY renew_cert.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/renew_cert.sh
 
-# Renew SSL certificates using Certbot
-RUN echo "0 12 * * * certbot renew --quiet" | crontab -
+# Add the cron job
+RUN echo "0 12 * * * /usr/local/bin/renew_cert.sh"
+
+# Start Nginx and cron (use a supervisord or similar for managing multiple processes if needed)
+CMD ["sh", "-c", "service cron start && nginx -g 'daemon off;'"]
