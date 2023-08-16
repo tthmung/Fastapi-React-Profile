@@ -11,9 +11,9 @@ COPY ./requirements.txt /backend/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /backend/requirements.txt
 
 # Copy the application code
-COPY . /backend/app
+COPY . .
 
 EXPOSE 8000
 
 # Set up the development server
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8000"]
