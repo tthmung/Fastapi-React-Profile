@@ -3,18 +3,20 @@ from pymongo.server_api import ServerApi
 from dotenv import dotenv_values
 from pathlib import Path
 from passlib.context import CryptContext
+import certifi
 
 
 env = dotenv_values(".env")
 
 # Mongo DB connection
-client = MongoClient(env["DATABASE_URL"], server_api=ServerApi("1"))
+#This config is not recommended for actual real solution this is just portfolio for demonstration only so no real threats
+client = MongoClient(env["DATABASE_URL"], server_api=ServerApi("1"), tlsCAFile=certifi.where())
 experience_collection = client["FARM_Profile"]["Experiences"]
 project_collection = client["FARM_Profile"]["Projects"]
 
 
 # Allowed origins
-origins = [env["CLIENT_ORIGIN"]]
+origins = ["http://localhost:3000", "https://tthmung.com", "https://www.tthmung.com"]
 
 # Login
 SECRET_KEY = env["SECRET_KEY"]
